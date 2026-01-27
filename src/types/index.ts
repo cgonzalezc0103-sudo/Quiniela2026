@@ -82,3 +82,26 @@ export interface ApiResponse<T> {
   message?: string;
   status?: string;
 }
+
+
+// Interfaces para Grupos
+export interface Grupo {
+  idGrupo: number;
+  grupo: string;
+}
+
+export interface EstadisticaGrupo {
+  idGrupo: number;
+  grupo: string;
+  idEquipo: number;
+  equipo: string;
+  siglas: string;
+  pj: number;  // Partidos Jugados
+  pg: number;  // Partidos Ganados
+  pe: number;  // Partidos Empatados
+  pp: number;  // Partidos Perdidos
+  gf: number;  // Goles a Favor
+  gc: number;  // Goles en Contra
+  dg: number;  // Diferencia de Goles
+  pts: number; // Puntos
+}

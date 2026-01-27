@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo } from '../types';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -56,6 +56,15 @@ export const usuariosAPI = {
   activarUsuario: (idUsuario: number) => api.post<{ message: string }>(`/usuarios/${idUsuario}/activar`),
   cambiarEstado: (idUsuario: number, activo: boolean) => 
     api.put<{ message: string }>(`/usuarios/${idUsuario}/estado`, { activo }),
+};
+
+// NUEVA API PARA GRUPOS
+export const gruposAPI = {
+  getGrupos: () => api.get<Grupo[]>('/grupos'),
+  getEstadisticas: (idGrupo?: number) => 
+    api.get<EstadisticaGrupo[]>('/grupos/estadisticas', { 
+      params: idGrupo ? { idGrupo } : {} 
+    }),
 };
 
 export default api;

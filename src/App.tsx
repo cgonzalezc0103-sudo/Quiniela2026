@@ -9,6 +9,7 @@ import Pronosticos from './pages/Pronosticos';
 import Resultados from './pages/Resultados';
 import AdminUsuarios from './pages/AdminUsuarios';
 import ProtectedRoute from './components/ProtectedRoute';
+import TablaGrupos from './components/Grupos/TablaGrupos';
 
 function App() {
   const { user } = useAuth();
@@ -26,6 +27,7 @@ function App() {
           <Route index element={<Inicio />} />
           <Route path="pronosticos" element={<Pronosticos />} />
           <Route path="resultados" element={<Resultados />} />
+          <Route path="grupos" element={<TablaGrupos />} />
           <Route path="admin/usuarios" element={
             <ProtectedRoute requireAdmin={true}>
               <AdminUsuarios />

@@ -12,6 +12,7 @@ const Layout: React.FC = () => {
     { path: '/', label: 'Inicio', icon: '🏠' },
     { path: '/pronosticos', label: 'Pronosticar', icon: '⚽' },
     { path: '/resultados', label: 'Resultados', icon: '📊' },
+    { path: '/grupos', label: 'Grupos', icon: '📊' },
   ];
 
   // Agregar tab de admin si el usuario es administrador
