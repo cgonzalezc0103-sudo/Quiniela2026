@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -7,23 +7,20 @@ interface ProtectedRouteProps {
   requireAdmin?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin = false }) => {
-  const { user, loading } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
+  children, 
+  requireAdmin = false 
+}) => {
+  const { user, isAuthenticated } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner">Cargando...</div>
-      </div>
-    );
+  // Verificar autenticación
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (requireAdmin && user.rol !== 'Administrador Site') {
-    return <Navigate to="/" replace />;
+  // Verificar permisos de admin si se requiere
+  if (requireAdmin && user?.rol !== 'Administrador Site') {
+    return <Navigate to="/" />;
   }
 
   return <>{children}</>;

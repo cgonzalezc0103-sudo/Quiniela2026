@@ -26,10 +26,8 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await authAPI.login(formData);
-      const { token, usuario } = response.data;
-      
-      login(usuario, token);
+      // Solo pasa las credenciales a login()
+      await login(formData);
       toast.success('¡Bienvenido!');
       navigate('/');
     } catch (error: any) {

@@ -7,7 +7,7 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Interceptor para agregar token a las requests
+// SOLO ESTE INTERCEPTOR BÁSICO (sin verificación de expiración)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -58,7 +58,6 @@ export const usuariosAPI = {
     api.put<{ message: string }>(`/usuarios/${idUsuario}/estado`, { activo }),
 };
 
-// NUEVA API PARA GRUPOS
 export const gruposAPI = {
   getGrupos: () => api.get<Grupo[]>('/grupos'),
   getEstadisticas: (idGrupo?: number) => 

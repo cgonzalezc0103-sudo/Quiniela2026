@@ -1,33 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
-import { styled } from '@mui/material/styles';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Box,
+  Typography,
+  CircularProgress,
+  Alert,
+  Card,
+  CardContent,
+  Container,
+  SelectChangeEvent
+} from '@mui/material';
 import { gruposAPI } from '../../services/api';
 import { Grupo, EstadisticaGrupo } from '../../types';
-import { SelectChangeEvent } from '@mui/material';
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
 
 const TablaGrupos: React.FC = () => {
   const [grupos, setGrupos] = useState<Grupo[]>([]);
@@ -36,7 +30,6 @@ const TablaGrupos: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Obtener lista de grupos
   useEffect(() => {
     const fetchGrupos = async () => {
       try {
@@ -56,7 +49,6 @@ const TablaGrupos: React.FC = () => {
     fetchGrupos();
   }, []);
 
-  // Obtener estadísticas del grupo seleccionado
   useEffect(() => {
     if (!grupoSeleccionado) return;
 
@@ -84,197 +76,411 @@ const TablaGrupos: React.FC = () => {
     setError(null);
   };
 
-  // Agrupar estadísticas por grupo (cuando se selecciona "todos")
-  const estadisticasPorGrupo = estadisticas.reduce((acc, item) => {
-    if (!acc[item.grupo]) {
-      acc[item.grupo] = [];
-    }
-    acc[item.grupo].push(item);
-    return acc;
-  }, {} as Record<string, EstadisticaGrupo[]>);
-
-  if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          Error: {error}
-        </Alert>
-      </Box>
-    );
-  }
-
   return (
-    <Box sx={{ width: '100%', p: 2 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Tabla de Grupos
-        </Typography>
-        
-        {grupos.length > 0 && (
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="grupo-select-label">Seleccionar Grupo</InputLabel>
-            <Select
-              labelId="grupo-select-label"
-              id="grupo-select"
-              value={grupoSeleccionado}
-              label="Seleccionar Grupo"
-              onChange={handleChangeGrupo}
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Card sx={{ boxShadow: 3 }}>
+        <CardContent>
+          {/* Header similar al de Ranking */}
+          <Box sx={{ mb: 4, textAlign: 'center' }}>
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 'bold',
+                color: 'primary.main',
+                mb: 1
+              }}
             >
-              <MenuItem value="todos">Todos los Grupos</MenuItem>
-              {grupos.map((grupo) => (
-                <MenuItem key={grupo.idGrupo} value={grupo.idGrupo.toString()}>
-                  Grupo {grupo.grupo}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-      </Box>
-
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <CircularProgress />
-        </Box>
-      ) : grupoSeleccionado === 'todos' ? (
-        // Mostrar todos los grupos
-        Object.entries(estadisticasPorGrupo).map(([grupoNombre, equipos]) => (
-          <Box key={grupoNombre} sx={{ mb: 4 }}>
-            <Typography variant="h5" gutterBottom sx={{ mt: 2, mb: 2 }}>
-              <Chip label={`Grupo ${grupoNombre}`} color="primary" sx={{ fontSize: '1.2rem', p: 1 }} />
+              Tabla de Grupos
+            </Typography>
+            <Typography 
+              variant="body1" 
+              color="text.secondary" 
+              sx={{ mb: 3 }}
+            >
+              Aquí puedes ver las estadísticas de los equipos por grupo
             </Typography>
             
-            <TableContainer component={Paper} sx={{ mb: 4 }}>
-              <Table sx={{ minWidth: 650 }} size="small">
+            {/* Selector de grupo - centrado */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+              {grupos.length > 0 && (
+                <FormControl sx={{ minWidth: 250 }} size="medium">
+                  <InputLabel id="grupo-select-label">Seleccionar Grupo</InputLabel>
+                  <Select
+                    labelId="grupo-select-label"
+                    id="grupo-select"
+                    value={grupoSeleccionado}
+                    label="Seleccionar Grupo"
+                    onChange={handleChangeGrupo}
+                    sx={{ bgcolor: 'background.paper' }}
+                  >
+                    <MenuItem value="todos">Todos los Grupos</MenuItem>
+                    {grupos.map((grupo) => (
+                      <MenuItem key={grupo.idGrupo} value={grupo.idGrupo.toString()}>
+                        Grupo {grupo.grupo}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+            </Box>
+          </Box>
+
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mb: 3,
+                '& .MuiAlert-message': { width: '100%' }
+              }}
+            >
+              {error}
+            </Alert>
+          ) : grupoSeleccionado === 'todos' ? (
+            // Mostrar todos los grupos (similar a tu diseño de Ranking)
+            grupos.map((grupo) => {
+              const equiposGrupo = estadisticas
+                .filter(e => e.idGrupo === grupo.idGrupo)
+                .sort((a, b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
+              
+              return equiposGrupo.length > 0 ? (
+                <Box key={grupo.idGrupo} sx={{ mb: 4 }}>
+                  {/* Título del grupo */}
+                  <Typography 
+                    variant="h5" 
+                    gutterBottom 
+                    sx={{ 
+                      fontWeight: 'medium',
+                      color: 'primary.dark',
+                      mb: 2,
+                      pl: 1,
+                      borderLeft: 4,
+                      borderColor: 'primary.main'
+                    }}
+                  >
+                    Grupo {grupo.grupo}
+                  </Typography>
+                  
+                  <TableContainer 
+                    component={Paper} 
+                    variant="outlined"
+                    sx={{ 
+                      borderRadius: 2,
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <Table size="medium">
+                      <TableHead>
+                        <TableRow sx={{ bgcolor: 'grey.100' }}>
+                          <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Pos</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Equipo</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PJ</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PG</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PE</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PP</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>GF</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>GC</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>DG</TableCell>
+                          <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Pts</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {equiposGrupo.map((equipo, index) => (
+                          <TableRow 
+                            key={`${equipo.idGrupo}-${equipo.idEquipo}`}
+                            sx={{ 
+                              '&:nth-of-type(even)': { bgcolor: 'action.hover' },
+                              '&:hover': { bgcolor: 'action.selected' }
+                            }}
+                          >
+                            <TableCell 
+                              component="th" 
+                              scope="row"
+                              sx={{ 
+                                fontWeight: 'medium',
+                                color: index < 2 ? 'primary.main' : 'inherit'
+                              }}
+                            >
+                              {index + 1}
+                            </TableCell>
+                            <TableCell>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <Typography 
+                                  variant="body2" 
+                                  fontWeight="bold"
+                                  sx={{ 
+                                    color: 'primary.dark',
+                                    minWidth: '40px'
+                                  }}
+                                >
+                                  {equipo.siglas}
+                                </Typography>
+                                <Typography variant="body1">
+                                  {equipo.equipo}
+                                </Typography>
+                              </Box>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography variant="body1">
+                                {equipo.pj}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                color="success.main"
+                              >
+                                {equipo.pg}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                color="warning.main"
+                              >
+                                {equipo.pe}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                color="error.main"
+                              >
+                                {equipo.pp}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                color="success.main"
+                              >
+                                {equipo.gf}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                color="error.main"
+                              >
+                                {equipo.gc}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                sx={{
+                                  color: equipo.dg > 0 ? 'success.main' : 
+                                         equipo.dg < 0 ? 'error.main' : 
+                                         'text.primary'
+                                }}
+                              >
+                                {equipo.dg > 0 ? `+${equipo.dg}` : equipo.dg}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Typography 
+                                variant="body1" 
+                                fontWeight="bold"
+                                sx={{
+                                  bgcolor: 'primary.light',
+                                  color: 'primary.contrastText',
+                                  px: 1.5,
+                                  py: 0.5,
+                                  borderRadius: 1,
+                                  display: 'inline-block',
+                                  minWidth: '40px'
+                                }}
+                              >
+                                {equipo.pts}
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              ) : null;
+            })
+          ) : (
+            // Mostrar un solo grupo
+            <TableContainer 
+              component={Paper} 
+              variant="outlined"
+              sx={{ 
+                borderRadius: 2,
+                overflow: 'hidden'
+              }}
+            >
+              <Table size="medium">
                 <TableHead>
-                  <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Pos</TableCell>
-                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Equipo</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PJ</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PG</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PE</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PP</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>GF</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>GC</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>DG</TableCell>
-                    <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>Pts</TableCell>
+                  <TableRow sx={{ bgcolor: 'grey.100' }}>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Pos</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Equipo</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PJ</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PG</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PE</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>PP</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>GF</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>GC</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>DG</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Pts</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {equipos.map((equipo, index) => (
-                    <StyledTableRow key={`${equipo.idGrupo}-${equipo.idEquipo}`}>
-                      <TableCell component="th" scope="row">
-                        {index + 1}
+                  {estadisticas.length > 0 ? (
+                    estadisticas
+                      .sort((a, b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf)
+                      .map((equipo, index) => (
+                      <TableRow 
+                        key={equipo.idEquipo}
+                        sx={{ 
+                          '&:nth-of-type(even)': { bgcolor: 'action.hover' },
+                          '&:hover': { bgcolor: 'action.selected' }
+                        }}
+                      >
+                        <TableCell 
+                          component="th" 
+                          scope="row"
+                          sx={{ 
+                            fontWeight: 'medium',
+                            color: index < 2 ? 'primary.main' : 'inherit'
+                          }}
+                        >
+                          {index + 1}
+                        </TableCell>
+                        <TableCell>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Typography 
+                              variant="body2" 
+                              fontWeight="bold"
+                              sx={{ 
+                                color: 'primary.dark',
+                                minWidth: '40px'
+                              }}
+                            >
+                              {equipo.siglas}
+                            </Typography>
+                            <Typography variant="body1">
+                              {equipo.equipo}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography variant="body1">
+                            {equipo.pj}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            color="success.main"
+                          >
+                            {equipo.pg}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            color="warning.main"
+                          >
+                            {equipo.pe}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            color="error.main"
+                          >
+                            {equipo.pp}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            color="success.main"
+                          >
+                            {equipo.gf}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            color="error.main"
+                          >
+                            {equipo.gc}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            sx={{
+                              color: equipo.dg > 0 ? 'success.main' : 
+                                     equipo.dg < 0 ? 'error.main' : 
+                                     'text.primary'
+                            }}
+                          >
+                            {equipo.dg > 0 ? `+${equipo.dg}` : equipo.dg}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography 
+                            variant="body1" 
+                            fontWeight="bold"
+                            sx={{
+                              bgcolor: 'primary.light',
+                              color: 'primary.contrastText',
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius: 1,
+                              display: 'inline-block',
+                              minWidth: '40px'
+                            }}
+                          >
+                            {equipo.pts}
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={10} align="center" sx={{ py: 4 }}>
+                        <Alert 
+                          severity="info" 
+                          sx={{ 
+                            maxWidth: 500,
+                            mx: 'auto'
+                          }}
+                        >
+                          No hay datos disponibles para este grupo.
+                        </Alert>
                       </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Chip 
-                            label={equipo.siglas} 
-                            size="small" 
-                            sx={{ mr: 1, fontWeight: 'bold' }}
-                          />
-                          {equipo.equipo}
-                        </Box>
-                      </TableCell>
-                      <TableCell align="center">{equipo.pj}</TableCell>
-                      <TableCell align="center">{equipo.pg}</TableCell>
-                      <TableCell align="center">{equipo.pe}</TableCell>
-                      <TableCell align="center">{equipo.pp}</TableCell>
-                      <TableCell align="center">{equipo.gf}</TableCell>
-                      <TableCell align="center">{equipo.gc}</TableCell>
-                      <TableCell align="center">
-                        <Chip 
-                          label={equipo.dg} 
-                          size="small"
-                          color={equipo.dg > 0 ? 'success' : equipo.dg < 0 ? 'error' : 'default'}
-                          variant="outlined"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <Chip 
-                          label={equipo.pts} 
-                          color="primary"
-                          sx={{ fontWeight: 'bold', minWidth: '40px' }}
-                        />
-                      </TableCell>
-                    </StyledTableRow>
-                  ))}
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
-          </Box>
-        ))
-      ) : (
-        // Mostrar solo un grupo
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Pos</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Equipo</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PJ</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PG</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PE</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>PP</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>GF</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>GC</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>DG</TableCell>
-                <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>Pts</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {estadisticas.length > 0 ? (
-                estadisticas.map((equipo, index) => (
-                  <StyledTableRow key={equipo.idEquipo}>
-                    <TableCell component="th" scope="row">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Chip 
-                          label={equipo.siglas} 
-                          size="small" 
-                          sx={{ mr: 1, fontWeight: 'bold' }}
-                        />
-                        {equipo.equipo}
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">{equipo.pj}</TableCell>
-                    <TableCell align="center">{equipo.pg}</TableCell>
-                    <TableCell align="center">{equipo.pe}</TableCell>
-                    <TableCell align="center">{equipo.pp}</TableCell>
-                    <TableCell align="center">{equipo.gf}</TableCell>
-                    <TableCell align="center">{equipo.gc}</TableCell>
-                    <TableCell align="center">
-                      <Chip 
-                        label={equipo.dg} 
-                        size="small"
-                        color={equipo.dg > 0 ? 'success' : equipo.dg < 0 ? 'error' : 'default'}
-                        variant="outlined"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Chip 
-                        label={equipo.pts} 
-                        color="primary"
-                        sx={{ fontWeight: 'bold', minWidth: '40px' }}
-                      />
-                    </TableCell>
-                  </StyledTableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={10} align="center">
-                    <Alert severity="info">
-                      No hay datos disponibles para este grupo.
-                    </Alert>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Box>
+          )}
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
