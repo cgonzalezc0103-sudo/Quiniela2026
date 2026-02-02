@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo  } from '../types';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -64,6 +64,10 @@ export const gruposAPI = {
     api.get<EstadisticaGrupo[]>('/grupos/estadisticas', { 
       params: idGrupo ? { idGrupo } : {} 
     }),
+};
+
+export const equiposAPI = {
+  getEquipos: () => api.get<Equipo[]>('/equipos'),
 };
 
 export default api;

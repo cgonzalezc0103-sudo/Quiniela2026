@@ -33,7 +33,9 @@ export interface RegisterRequest {
   Nombres: string;
   Email: string;
   Password: string;
-  CodigoReferencia: string;
+  Cedula: string;
+  CodigoPromocional: string;
+  IdEquipo?: number;
 }
 
 export interface Juego {
@@ -104,4 +106,12 @@ export interface EstadisticaGrupo {
   gc: number;  // Goles en Contra
   dg: number;  // Diferencia de Goles
   pts: number; // Puntos
+}
+
+export interface Equipo {
+  IdEquipo: number;
+  Equipo: string;
+  Siglas: string;
+  IdGrupo: number;
+  Grupo: string;
 }
