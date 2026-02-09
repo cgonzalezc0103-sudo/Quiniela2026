@@ -115,3 +115,9 @@ export interface Equipo {
   IdGrupo: number;
   Grupo: string;
 }
+
+export interface RegisterResponse {
+  message: string;
+  idUsuario: number;
+  indActivo: boolean;
+}

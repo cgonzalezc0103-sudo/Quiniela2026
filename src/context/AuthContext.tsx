@@ -1,13 +1,13 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { authAPI } from '../services/api';
-import { User, LoginRequest, RegisterRequest } from '../types';
+import { User, LoginRequest, RegisterRequest, RegisterResponse } from '../types';
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (credentials: LoginRequest) => Promise<void>;
   logout: () => void;
-  register: (userData: RegisterRequest) => Promise<number>;
+  register: (userData: RegisterRequest) => Promise<RegisterResponse>;
   isAuthenticated: boolean;
   tokenExpiraEn: string | null;
 }
@@ -151,15 +151,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     window.location.href = '/login';
   };
 
-  const register = async (userData: RegisterRequest) => {
-    try {
-      const response = await authAPI.register(userData);
-      return response.data.idUsuario;
-    } catch (error) {
-      console.error('Error en registro:', error);
-      throw error;
-    }
-  };
+const register = async (userData: RegisterRequest): Promise<RegisterResponse> => {
+  try {
+    const response = await authAPI.register(userData);
+    return response.data; // Devuelve el objeto completo
+  } catch (error) {
+    console.error('Error en registro:', error);
+    throw error;
+  }
+};
 
   const isAuthenticated = !!token && !isTokenExpired();
   const tokenExpiraEn = getTiempoRestante();

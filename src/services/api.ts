@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo  } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse  } from '../types';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -31,7 +31,7 @@ api.interceptors.response.use(
 
 export const authAPI = {
   login: (credentials: LoginRequest) => api.post<{ token: string; usuario: User }>('/auth/login', credentials),
-  register: (userData: RegisterRequest) => api.post<{ message: string; idUsuario: number }>('/auth/register', userData),
+  register: (userData: RegisterRequest) => api.post<RegisterResponse>('/auth/register', userData), 
 };
 
 export const pronosticosAPI = {
