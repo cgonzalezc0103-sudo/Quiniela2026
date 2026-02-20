@@ -121,3 +121,40 @@ export interface RegisterResponse {
   idUsuario: number;
   indActivo: boolean;
 }
+
+export interface CodigoPromocional {
+  idCodigoPromocional: number;
+  codigo: string;
+  empresa: string;
+  cantidad: number;
+  cantidadRestante: number;
+  fechaCreacion: string;
+  indActivo: boolean;
+  usuariosRegistrados: number;
+}
+
+export interface UsuarioCodigo {
+  idUsuario: number;
+  userName: string;
+  nombres: string;
+  email: string;
+  cedula: string;
+  indActivo: boolean;
+  fechaRegistro?: string;
+  equipoFavorito?: string;
+}
+
+export interface SearchFilters {
+  termino: string;
+  soloPendientes: boolean;
+}
+
+export interface EmpresaSimple {
+  idEmpresa: number;
+  empresa: string;
+}
+
+export interface CrearCodigoRequest {
+  idEmpresa: number;
+  cantidad: number;
+}

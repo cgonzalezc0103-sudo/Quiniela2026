@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse  } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple  } from '../types';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -50,13 +50,7 @@ export const rankingAPI = {
   get: () => api.get<Ranking[]>('/ranking'),
 };
 
-export const usuariosAPI = {
-  getPendientes: () => api.get<UsuarioAdmin[]>('/usuarios/pendientes'),
-  getAll: () => api.get<UsuarioAdmin[]>('/usuarios'),
-  activarUsuario: (idUsuario: number) => api.post<{ message: string }>(`/usuarios/${idUsuario}/activar`),
-  cambiarEstado: (idUsuario: number, activo: boolean) => 
-    api.put<{ message: string }>(`/usuarios/${idUsuario}/estado`, { activo }),
-};
+
 
 export const gruposAPI = {
   getGrupos: () => api.get<Grupo[]>('/grupos'),
@@ -68,6 +62,23 @@ export const gruposAPI = {
 
 export const equiposAPI = {
   getEquipos: () => api.get<Equipo[]>('/equipos'),
+};
+
+export const codigosAPI = {
+  getCodigos: () => api.get<CodigoPromocional[]>('/codigospromocionales'),
+  getUsuariosPorCodigo: (id: number) => api.get<UsuarioCodigo[]>(`/codigospromocionales/${id}/usuarios`),
+  crearCodigo: (data: CrearCodigoRequest) => api.post<CodigoPromocional>('/codigospromocionales', data),
+  getEmpresas: () => api.get<EmpresaSimple[]>('/codigospromocionales/empresas'),
+};
+
+export const usuariosAPI = {
+  getPendientes: () => api.get<UsuarioAdmin[]>('/usuarios/pendientes'),
+  getAll: () => api.get<UsuarioAdmin[]>('/usuarios'),
+  activarUsuario: (idUsuario: number) => api.post<UsuarioAdmin>(`/usuarios/${idUsuario}/activar`),
+  cambiarEstado: (idUsuario: number, activo: boolean) => 
+    api.put<UsuarioAdmin>(`/usuarios/${idUsuario}/estado`, { activo }),
+  buscarUsuarios: (termino: string, soloPendientes: boolean = false) => 
+    api.get<UsuarioAdmin[]>('/usuarios/buscar', { params: { termino, soloPendientes } }),
 };
 
 export default api;
