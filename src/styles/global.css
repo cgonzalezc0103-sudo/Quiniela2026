@@ -1722,3 +1722,91 @@ input:valid {
   color: #666;
   font-style: italic;
 }
+
+/* Estilos para empresas */
+.empresas-container {
+  margin-top: 20px;
+}
+
+.empresas-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.empresas-table th {
+  background: #1976d2;
+  color: white;
+  font-weight: 600;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.empresas-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.empresas-table tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.empresa-inactiva {
+  background: #fff3f3;
+  color: #666;
+}
+
+.btn-crear-empresa {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.3s;
+}
+
+.btn-crear-empresa:hover {
+  background: #218838;
+}
+
+.btn-edit {
+  background: #ffc107;
+  color: #333;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: background 0.3s;
+}
+
+.btn-edit:hover {
+  background: #e0a800;
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+  .empresas-table {
+    font-size: 14px;
+  }
+  
+  .empresas-table th,
+  .empresas-table td {
+    padding: 8px 10px;
+  }
+  
+  .btn-edit {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}

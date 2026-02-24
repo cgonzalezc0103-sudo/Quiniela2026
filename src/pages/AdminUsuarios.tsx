@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { usuariosAPI, codigosAPI } from '../services/api';
-import { UsuarioAdmin, CodigoPromocional, UsuarioCodigo, EmpresaSimple } from '../types';
+import { usuariosAPI, codigosAPI, empresasAPI } from '../services/api';
+import { UsuarioAdmin, CodigoPromocional, UsuarioCodigo, Empresa } from '../types';
 import CrearCodigoModal from '../components/Modals/CrearCodigoModal';
+import CrearEmpresaModal from '../components/Modals/CrearEmpresaModal';
+import EditarEmpresaModal from '../components/Modals/EditarEmpresaModal';
 
 // Definir el tipo para el timeout
 type Timeout = ReturnType<typeof setTimeout>;
 
 const AdminUsuarios: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'pendientes' | 'todos' | 'codigos'>('pendientes');
+  const [activeTab, setActiveTab] = useState<'pendientes' | 'todos' | 'codigos' | 'empresas'>('pendientes');
   
   // Estados para usuarios
   const [usuarios, setUsuarios] = useState<UsuarioAdmin[]>([]);
@@ -26,15 +28,30 @@ const AdminUsuarios: React.FC = () => {
   // Estados para filtros de códigos
   const [filtroEmpresa, setFiltroEmpresa] = useState('');
   const [filtroCodigo, setFiltroCodigo] = useState('');
-  const [empresas, setEmpresas] = useState<string[]>([]);
+  const [empresasList, setEmpresasList] = useState<string[]>([]);
   
   // Estado para modal de crear código
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Estados para empresas
+  const [empresas, setEmpresas] = useState<Empresa[]>([]);
+  const [loadingEmpresas, setLoadingEmpresas] = useState(false);
+  const [searchTermEmpresas, setSearchTermEmpresas] = useState('');
+  const [searchTimeoutEmpresas, setSearchTimeoutEmpresas] = useState<Timeout | null>(null);
+  const [isModalCrearEmpresaOpen, setIsModalCrearEmpresaOpen] = useState(false);
+  const [isModalEditarEmpresaOpen, setIsModalEditarEmpresaOpen] = useState(false);
+  const [empresaSeleccionada, setEmpresaSeleccionada] = useState<Empresa | null>(null);
 
   // Cargar datos según el tab activo
   useEffect(() => {
     if (activeTab === 'codigos') {
       loadCodigos();
+    } else if (activeTab === 'empresas') {
+      if (searchTermEmpresas) {
+        buscarEmpresas();
+      } else {
+        loadEmpresas();
+      }
     } else {
       loadUsuarios();
     }
@@ -42,7 +59,7 @@ const AdminUsuarios: React.FC = () => {
 
   // Cargar usuarios (con o sin búsqueda)
   useEffect(() => {
-    if (activeTab !== 'codigos') {
+    if (activeTab !== 'codigos' && activeTab !== 'empresas') {
       if (searchTerm) {
         buscarUsuarios();
       } else {
@@ -159,7 +176,7 @@ const AdminUsuarios: React.FC = () => {
       
       // Extraer empresas únicas para el filtro
       const uniqueEmpresas = [...new Set(response.data.map((c: CodigoPromocional) => c.empresa))];
-      setEmpresas(uniqueEmpresas);
+      setEmpresasList(uniqueEmpresas);
     } catch (error: any) {
       toast.error('Error al cargar códigos promocionales');
       console.error('Error loading codigos:', error);
@@ -203,14 +220,102 @@ const AdminUsuarios: React.FC = () => {
     setSelectedCodigo(null);
   };
 
+  // Funciones para empresas
+  const loadEmpresas = async () => {
+    try {
+      setLoadingEmpresas(true);
+      const response = await empresasAPI.getAll();
+      setEmpresas(response.data);
+    } catch (error: any) {
+      toast.error('Error al cargar empresas');
+      console.error('Error loading empresas:', error);
+    } finally {
+      setLoadingEmpresas(false);
+    }
+  };
+
+  const buscarEmpresas = async () => {
+    if (searchTermEmpresas.length < 2) return;
+    
+    try {
+      setLoadingEmpresas(true);
+      const response = await empresasAPI.buscar(searchTermEmpresas);
+      setEmpresas(response.data);
+    } catch (error: any) {
+      toast.error('Error al buscar empresas');
+      console.error('Error searching empresas:', error);
+    } finally {
+      setLoadingEmpresas(false);
+    }
+  };
+
+  const handleSearchEmpresasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTermEmpresas(value);
+    
+    if (searchTimeoutEmpresas) {
+      clearTimeout(searchTimeoutEmpresas);
+    }
+    
+    if (value.length >= 2 || value.length === 0) {
+      const timeout = setTimeout(() => {
+        if (value) {
+          buscarEmpresas();
+        } else {
+          loadEmpresas();
+        }
+      }, 500);
+      setSearchTimeoutEmpresas(timeout);
+    }
+  };
+
+  const cambiarEstadoEmpresa = async (idEmpresa: number, activo: boolean) => {
+    try {
+      const response = await empresasAPI.cambiarEstado(idEmpresa, activo);
+      const action = activo ? 'activada' : 'desactivada';
+      toast.success(response.data.message || `Empresa ${action} exitosamente`);
+      
+      // Actualizar la empresa en la lista local
+      setEmpresas(prev => 
+        prev.map(e => 
+          e.idEmpresa === idEmpresa 
+            ? response.data.empresa 
+            : e
+        )
+      );
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Error al cambiar estado de la empresa');
+    }
+  };
+
+  const abrirModalEditar = (empresa: Empresa) => {
+    setEmpresaSeleccionada(empresa);
+    setIsModalEditarEmpresaOpen(true);
+  };
+
+  const handleEmpresaCreada = (nuevaEmpresa: Empresa) => {
+    setEmpresas(prev => [nuevaEmpresa, ...prev]);
+  };
+
+  const handleEmpresaActualizada = (empresaActualizada: Empresa) => {
+    setEmpresas(prev => 
+      prev.map(e => 
+        e.idEmpresa === empresaActualizada.idEmpresa 
+          ? empresaActualizada 
+          : e
+      )
+    );
+    setEmpresaSeleccionada(null);
+  };
+
   return (
     <div className="page-container">
       <div className="page-header">
         <h1>👑 Panel de Administración</h1>
-        <p>Gestiona usuarios y códigos promocionales</p>
+        <p>Gestiona usuarios, códigos promocionales y empresas</p>
       </div>
 
-      {/* Tabs principales - 3 tabs: Pendientes, Todos, Códigos */}
+      {/* Tabs principales - 4 tabs: Pendientes, Todos, Códigos, Empresas */}
       <div className="admin-tabs">
         <button
           className={`admin-tab ${activeTab === 'pendientes' ? 'active' : ''}`}
@@ -218,6 +323,7 @@ const AdminUsuarios: React.FC = () => {
             setActiveTab('pendientes');
             setSearchTerm('');
             setSelectedCodigo(null);
+            setSearchTermEmpresas('');
           }}
         >
           ⏳ Pendientes
@@ -231,6 +337,7 @@ const AdminUsuarios: React.FC = () => {
             setActiveTab('todos');
             setSearchTerm('');
             setSelectedCodigo(null);
+            setSearchTermEmpresas('');
           }}
         >
           👥 Todos los Usuarios
@@ -244,12 +351,27 @@ const AdminUsuarios: React.FC = () => {
             setActiveTab('codigos');
             setSearchTerm('');
             setSelectedCodigo(null);
+            setSearchTermEmpresas('');
             limpiarFiltros();
           }}
         >
           🎫 Códigos Promocionales
           {activeTab === 'codigos' && (
             <span className="tab-count">{codigos.length}</span>
+          )}
+        </button>
+        <button
+          className={`admin-tab ${activeTab === 'empresas' ? 'active' : ''}`}
+          onClick={() => {
+            setActiveTab('empresas');
+            setSearchTerm('');
+            setSelectedCodigo(null);
+            setSearchTermEmpresas('');
+          }}
+        >
+          🏢 Empresas
+          {activeTab === 'empresas' && (
+            <span className="tab-count">{empresas.length}</span>
           )}
         </button>
       </div>
@@ -387,7 +509,7 @@ const AdminUsuarios: React.FC = () => {
                       className="filtro-select"
                     >
                       <option value="">Todas las empresas</option>
-                      {empresas.map(empresa => (
+                      {empresasList.map(empresa => (
                         <option key={empresa} value={empresa}>{empresa}</option>
                       ))}
                     </select>
@@ -532,6 +654,133 @@ const AdminUsuarios: React.FC = () => {
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               onSuccess={handleCodigoCreado}
+            />
+          </div>
+        )}
+
+        {/* Tab de Empresas */}
+        {activeTab === 'empresas' && (
+          <div className="empresas-container">
+            {/* Buscador y botón crear */}
+            <div className="filtros-container">
+              <div className="filtros-box">
+                <div className="filtros-header">
+                  <h3>Gestión de Empresas</h3>
+                  <button
+                    onClick={() => setIsModalCrearEmpresaOpen(true)}
+                    className="btn-crear-empresa"
+                  >
+                    + Nueva Empresa
+                  </button>
+                </div>
+                <div className="search-box" style={{ maxWidth: '100%', marginTop: '10px' }}>
+                  <input
+                    type="text"
+                    placeholder="Buscar por nombre, responsable, email o teléfono..."
+                    value={searchTermEmpresas}
+                    onChange={handleSearchEmpresasChange}
+                    className="search-input"
+                  />
+                  {searchTermEmpresas && (
+                    <button
+                      className="clear-search"
+                      onClick={() => {
+                        setSearchTermEmpresas('');
+                        loadEmpresas();
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Tabla de empresas */}
+            {loadingEmpresas ? (
+              <div className="loading">Cargando empresas...</div>
+            ) : empresas.length === 0 ? (
+              <div className="no-data">
+                {searchTermEmpresas 
+                  ? 'No se encontraron empresas con ese criterio de búsqueda'
+                  : 'No hay empresas registradas. ¡Crea una nueva!'}
+              </div>
+            ) : (
+              <div className="table-container">
+                <table className="empresas-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Empresa</th>
+                      <th>Responsable</th>
+                      <th>Teléfono</th>
+                      <th>Email</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {empresas.map(empresa => (
+                      <tr key={empresa.idEmpresa} className={!empresa.indActivo ? 'empresa-inactiva' : ''}>
+                        <td>{empresa.idEmpresa}</td>
+                        <td>
+                          <strong>{empresa.empresa}</strong>
+                        </td>
+                        <td>{empresa.responsable || '-'}</td>
+                        <td>{empresa.telefono || '-'}</td>
+                        <td>{empresa.email || '-'}</td>
+                        <td>
+                          <span className={`status-badge ${empresa.indActivo ? 'active' : 'inactive'}`}>
+                            {empresa.indActivo ? '✅ Activa' : '⏳ Inactiva'}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="action-buttons">
+                            <button
+                              onClick={() => abrirModalEditar(empresa)}
+                              className="btn-edit"
+                            >
+                              ✏️ Editar
+                            </button>
+                            {empresa.indActivo ? (
+                              <button
+                                onClick={() => cambiarEstadoEmpresa(empresa.idEmpresa, false)}
+                                className="btn-deactivate"
+                              >
+                                ❌ Desactivar
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => cambiarEstadoEmpresa(empresa.idEmpresa, true)}
+                                className="btn-activate"
+                              >
+                                ✅ Activar
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            
+            {/* Modales */}
+            <CrearEmpresaModal
+              isOpen={isModalCrearEmpresaOpen}
+              onClose={() => setIsModalCrearEmpresaOpen(false)}
+              onSuccess={handleEmpresaCreada}
+            />
+            
+            <EditarEmpresaModal
+              isOpen={isModalEditarEmpresaOpen}
+              onClose={() => {
+                setIsModalEditarEmpresaOpen(false);
+                setEmpresaSeleccionada(null);
+              }}
+              onSuccess={handleEmpresaActualizada}
+              empresa={empresaSeleccionada}
             />
           </div>
         )}

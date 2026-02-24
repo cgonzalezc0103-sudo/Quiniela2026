@@ -158,3 +158,26 @@ export interface CrearCodigoRequest {
   idEmpresa: number;
   cantidad: number;
 }
+
+export interface Empresa {
+  idEmpresa: number;
+  empresa: string;
+  responsable?: string;
+  telefono?: string;
+  email?: string;
+  indActivo: boolean;
+}
+
+export interface CrearEmpresaRequest {
+  empresa: string;
+  responsable?: string;
+  telefono?: string;
+  email: string;
+}
+
+export interface ActualizarEmpresaRequest {
+  empresa: string;
+  responsable?: string;
+  telefono?: string;
+  email: string;
+}

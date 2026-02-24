@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple  } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple, Empresa, CrearEmpresaRequest, ActualizarEmpresaRequest  } from '../types';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -79,6 +79,15 @@ export const usuariosAPI = {
     api.put<UsuarioAdmin>(`/usuarios/${idUsuario}/estado`, { activo }),
   buscarUsuarios: (termino: string, soloPendientes: boolean = false) => 
     api.get<UsuarioAdmin[]>('/usuarios/buscar', { params: { termino, soloPendientes } }),
+};
+
+export const empresasAPI = {
+  getAll: () => api.get<Empresa[]>('/empresas'),
+  buscar: (termino: string) => api.get<Empresa[]>('/empresas/buscar', { params: { termino } }),
+  getById: (id: number) => api.get<Empresa>(`/empresas/${id}`),
+  crear: (data: CrearEmpresaRequest) => api.post<Empresa>('/empresas', data),
+  actualizar: (id: number, data: ActualizarEmpresaRequest) => api.put<Empresa>(`/empresas/${id}`, data),
+  cambiarEstado: (id: number, activo: boolean) => api.put<{ message: string; empresa: Empresa }>(`/empresas/${id}/estado`, { activo }),
 };
 
 export default api;
