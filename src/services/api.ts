@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple, Empresa, CrearEmpresaRequest, ActualizarEmpresaRequest  } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple, Empresa, CrearEmpresaRequest, ActualizarEmpresaRequest, JuegoAdmin, JuegoResultado  } from '../types';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -88,6 +88,20 @@ export const empresasAPI = {
   crear: (data: CrearEmpresaRequest) => api.post<Empresa>('/empresas', data),
   actualizar: (id: number, data: ActualizarEmpresaRequest) => api.put<Empresa>(`/empresas/${id}`, data),
   cambiarEstado: (id: number, activo: boolean) => api.put<{ message: string; empresa: Empresa }>(`/empresas/${id}/estado`, { activo }),
+};
+
+export const passwordAPI = {
+  cambiar: (data: { Email: string; Cedula: string; PasswordAnterior: string; PasswordNueva: string }) => 
+    api.post<{ message: string }>('/password/cambiar', data),
+  restablecer: (data: { Email: string; Cedula: string }) => 
+    api.post<{ message: string }>('/password/restablecer', data),
+};
+
+
+export const juegosAPI = {
+  getAdmin: () => api.get<JuegoAdmin[]>('/juegos/admin'),
+  actualizarResultado: (idJuego: number, resultado1: number, resultado2: number) => 
+    api.put<{ message: string; juego: JuegoResultado }>(`/juegos/resultado/${idJuego}`, { resultado1, resultado2 }),
 };
 
 export default api;

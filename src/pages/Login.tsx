@@ -73,6 +73,12 @@ const Login: React.FC = () => {
           <button type="submit" disabled={loading} className="auth-btn">
             {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>
+
+          <div className="recovery-link">
+            <Link to="/recuperar-password" className="auth-link">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
         </form>
         
         <div className="auth-footer">

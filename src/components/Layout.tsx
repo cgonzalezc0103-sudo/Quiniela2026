@@ -8,17 +8,35 @@ const Layout: React.FC = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const menuItems = [
-    { path: '/', label: 'Inicio', icon: '🏠' },
-    { path: '/pronosticos', label: 'Pronosticar', icon: '⚽' },
-    { path: '/resultados', label: 'Resultados', icon: '📊' },
-    { path: '/grupos', label: 'Grupos', icon: '📊' },
-  ];
+  // Construir menuItems según el rol
+  const getMenuItems = () => {
+    const items = [
+      { path: '/', label: 'Inicio', icon: '🏠' },
+    ];
 
-  // Agregar tab de admin si el usuario es administrador
-  if (user?.rol === 'Administrador Site') {
-    menuItems.push({ path: '/admin/usuarios', label: 'Administración', icon: '👥' });
-  }
+    // Solo usuarios no administradores ven Pronosticar
+    if (user?.rol !== 'Administrador Site') {
+      items.push({ path: '/pronosticos', label: 'Pronosticar', icon: '⚽' });
+    }
+
+    // Todos ven estos (excepto admin que no ve pronosticar)
+    items.push(
+      { path: '/resultados', label: 'Resultados', icon: '📊' },
+      { path: '/grupos', label: 'Grupos', icon: '📊' }
+    );
+
+    // Administradores ven opciones adicionales
+    if (user?.rol === 'Administrador Site') {
+      items.push(
+        { path: '/admin/juegos', label: 'Admin Juegos', icon: '⚙️' },
+        { path: '/admin/usuarios', label: 'Administración', icon: '👥' }
+      );
+    }
+
+    return items;
+  };
+
+  const menuItems = getMenuItems();
 
   const handleLogout = () => {
     logout();

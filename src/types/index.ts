@@ -181,3 +181,25 @@ export interface ActualizarEmpresaRequest {
   telefono?: string;
   email: string;
 }
+
+export interface JuegoAdmin {
+  idJuego: number;
+  idRonda: number;
+  ronda: string;
+  equipo1: string;
+  siglas1: string;
+  equipo2: string;
+  siglas2: string;
+  fecha: string;
+  resultado1: number;
+  resultado2: number;
+  indFinalizado: boolean;
+  puedeIngresarResultado: boolean;
+}
+
+export interface JuegoResultado {
+  idJuego: number;
+  resultado1: number;
+  resultado2: number;
+  indFinalizado: boolean;
+}
