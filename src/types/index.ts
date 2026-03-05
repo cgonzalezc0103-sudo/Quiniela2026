@@ -36,6 +36,7 @@ export interface RegisterRequest {
   Cedula: string;
   CodigoPromocional: string;
   IdEquipo?: number;
+  aceptaTerminos?: boolean;
 }
 
 export interface Juego {

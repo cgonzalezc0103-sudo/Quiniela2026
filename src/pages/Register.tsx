@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import { equiposAPI } from '../services/api';
 import { RegisterRequest, Equipo, RegisterResponse } from '../types'; // Agregar RegisterResponse
+import TerminosCondiciones from '../components/TerminosCondiciones';
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -23,6 +24,7 @@ const Register: React.FC = () => {
   const [successDetails, setSuccessDetails] = useState<RegisterResponse | null>(null);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const [showTerminos, setShowTerminos] = useState(false);
 
   // Función para convertir IdGrupo a letra (1→A, 2→B, etc.)
   const getLetraGrupo = (idGrupo: number): string => {
@@ -301,18 +303,33 @@ const Register: React.FC = () => {
           </div>
           
           <div className="form-group" style={{ marginTop: '20px' }}>
-            <div className="form-check">
+            <div className="terminos-checkbox">
               <input
                 type="checkbox"
                 className="form-check-input"
                 id="termsCheck"
                 required
+                checked={formData.aceptaTerminos}
+                onChange={(e) => setFormData({ ...formData, aceptaTerminos: e.target.checked })}
               />
               <label className="form-check-label" htmlFor="termsCheck">
-                Acepto los términos y condiciones
+                Acepto los <button 
+                  type="button"
+                  className="terminos-link"
+                  onClick={() => setShowTerminos(true)}
+                >
+                  términos y condiciones
+                </button>
               </label>
             </div>
           </div>
+
+          {/* Modal de términos */}
+          <TerminosCondiciones
+            isOpen={showTerminos}
+            onClose={() => setShowTerminos(false)}
+          />
+
           
           <button type="submit" disabled={loading} className="auth-btn">
             {loading ? 'Registrando...' : 'Registrarse'}
