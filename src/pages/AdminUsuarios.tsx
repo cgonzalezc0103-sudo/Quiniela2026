@@ -124,48 +124,30 @@ const AdminUsuarios: React.FC = () => {
     }
   };
 
-  const activarUsuario = async (idUsuario: number) => {
-    try {
-      const response = await usuariosAPI.activarUsuario(idUsuario);
-      toast.success(response.data.message || 'Usuario activado exitosamente');
-      
-      if (response.data.usuario) {
-        setUsuarios(prev => 
-          prev.map(u => 
-            u.idUsuario === idUsuario 
-              ? response.data.usuario 
-              : u
-          )
-        );
-      } else {
-        loadUsuarios();
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error al activar usuario');
-    }
-  };
+const activarUsuario = async (idUsuario: number) => {
+  try {
+    const response = await usuariosAPI.activarUsuario(idUsuario);
+    toast.success(response.data.message || 'Usuario activado exitosamente');
+    
+    // Actualizar el usuario en la lista local
+    loadUsuarios(); // Simplemente recargar la lista en lugar de intentar actualizar
+  } catch (error: any) {
+    toast.error(error.response?.data?.message || 'Error al activar usuario');
+  }
+};
 
-  const cambiarEstadoUsuario = async (idUsuario: number, activo: boolean) => {
-    try {
-      const response = await usuariosAPI.cambiarEstado(idUsuario, activo);
-      const action = activo ? 'activado' : 'desactivado';
-      toast.success(response.data.message || `Usuario ${action} exitosamente`);
-      
-      if (response.data.usuario) {
-        setUsuarios(prev => 
-          prev.map(u => 
-            u.idUsuario === idUsuario 
-              ? response.data.usuario 
-              : u
-          )
-        );
-      } else {
-        loadUsuarios();
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error al cambiar estado del usuario');
-    }
-  };
+const cambiarEstadoUsuario = async (idUsuario: number, activo: boolean) => {
+  try {
+    const response = await usuariosAPI.cambiarEstado(idUsuario, activo);
+    const action = activo ? 'activado' : 'desactivado';
+    toast.success(response.data.message || `Usuario ${action} exitosamente`);
+    
+    // Actualizar el usuario en la lista local
+    loadUsuarios(); // Simplemente recargar la lista en lugar de intentar actualizar
+  } catch (error: any) {
+    toast.error(error.response?.data?.message || 'Error al cambiar estado del usuario');
+  }
+};
 
   // Funciones para códigos promocionales
   const loadCodigos = async () => {

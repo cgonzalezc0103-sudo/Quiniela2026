@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { pronosticosAPI } from '../services/api';
 import { Juego } from '../types';
 import { useAuth } from '../context/AuthContext';
+import FlagImage from '../components/FlagImage';
 
 const Pronosticos: React.FC = () => {
   const [juegos, setJuegos] = useState<Juego[]>([]);
@@ -114,7 +115,10 @@ const Pronosticos: React.FC = () => {
     return (
       <div className="page-container">
         <div className="page-header">
-          <h1>⚽ Pronósticos</h1>
+          <h1>
+            <span className="emoji">⚽</span>
+            <span className="text-gradient">Pronósticos</span>
+          </h1>
           <p>Los administradores no pueden realizar pronósticos</p>
         </div>
         <div className="admin-message">
@@ -136,7 +140,10 @@ const Pronosticos: React.FC = () => {
     return (
       <div className="page-container">
         <div className="page-header">
-          <h1>⚽ Pronósticos</h1>
+          <h1>
+            <span className="emoji">⚽</span>
+            <span className="text-gradient">Pronósticos</span>
+          </h1>
           <p>No hay juegos disponibles para pronosticar en este momento</p>
         </div>
         <div className="no-data">
@@ -149,7 +156,10 @@ const Pronosticos: React.FC = () => {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1>⚽ Pronósticos</h1>
+        <h1>
+          <span className="emoji">⚽</span>
+          <span className="text-gradient">Pronósticos</span>
+        </h1>
         <p>Ingresa tus pronósticos para los próximos juegos</p>
       </div>
 
@@ -163,12 +173,20 @@ const Pronosticos: React.FC = () => {
             
             <div className="juego-equipos">
               <div className="equipo">
-                <span className="siglas">{juego.siglas1}</span>
+                <FlagImage 
+                  siglas={juego.siglas1} 
+                  nombre={juego.equipo1}
+                  size="medium"
+                />
                 <span className="nombre">{juego.equipo1}</span>
               </div>
               <span className="vs">VS</span>
               <div className="equipo">
-                <span className="siglas">{juego.siglas2}</span>
+                <FlagImage 
+                  siglas={juego.siglas2} 
+                  nombre={juego.equipo2}
+                  size="medium"
+                />
                 <span className="nombre">{juego.equipo2}</span>
               </div>
             </div>

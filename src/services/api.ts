@@ -3,6 +3,10 @@ import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultad
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
+//const API_BASE_URL = 'http://quinielaqa.norkut.com.ve:5001/api';
+
+//const API_BASE_URL = 'http://quiniela2026.com:5001/api';
+
 const api = axios.create({
   baseURL: API_BASE_URL,
 });

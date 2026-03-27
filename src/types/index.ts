@@ -21,6 +21,7 @@ export interface UsuarioAdmin {
   idEmpresa?: number;
   idEquipo?: number;
   fechaRegistro?: string;
+  message? : string;
 }
 
 export interface LoginRequest {
@@ -78,6 +79,7 @@ export interface Ranking {
   nombres: string;
   empresa: string;
   puntosTotales: number;
+  alias: string;
 }
 
 export interface ApiResponse<T> {

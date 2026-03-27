@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import { gruposAPI } from '../../services/api';
 import { Grupo, EstadisticaGrupo } from '../../types';
+import FlagImage from '../../components/FlagImage';
 
 const TablaGrupos: React.FC = () => {
   const [grupos, setGrupos] = useState<Grupo[]>([]);
@@ -142,7 +143,7 @@ const TablaGrupos: React.FC = () => {
               {error}
             </Alert>
           ) : grupoSeleccionado === 'todos' ? (
-            // Mostrar todos los grupos (similar a tu diseño de Ranking)
+            // Mostrar todos los grupos
             grupos.map((grupo) => {
               const equiposGrupo = estadisticas
                 .filter(e => e.idGrupo === grupo.idGrupo)
@@ -210,16 +211,11 @@ const TablaGrupos: React.FC = () => {
                             </TableCell>
                             <TableCell>
                               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                <Typography 
-                                  variant="body2" 
-                                  fontWeight="bold"
-                                  sx={{ 
-                                    color: 'primary.dark',
-                                    minWidth: '40px'
-                                  }}
-                                >
-                                  {equipo.siglas}
-                                </Typography>
+                                <FlagImage 
+                                  siglas={equipo.siglas} 
+                                  nombre={equipo.equipo}
+                                  size="small"
+                                />
                                 <Typography variant="body1">
                                   {equipo.equipo}
                                 </Typography>
@@ -362,16 +358,11 @@ const TablaGrupos: React.FC = () => {
                         </TableCell>
                         <TableCell>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <Typography 
-                              variant="body2" 
-                              fontWeight="bold"
-                              sx={{ 
-                                color: 'primary.dark',
-                                minWidth: '40px'
-                              }}
-                            >
-                              {equipo.siglas}
-                            </Typography>
+                            <FlagImage 
+                              siglas={equipo.siglas} 
+                              nombre={equipo.equipo}
+                              size="small"
+                            />
                             <Typography variant="body1">
                               {equipo.equipo}
                             </Typography>

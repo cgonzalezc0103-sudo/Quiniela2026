@@ -12,6 +12,7 @@ import AdminJuegos from './pages/AdminJuegos'; // Agregar esta importación
 import ProtectedRoute from './components/ProtectedRoute';
 import TablaGrupos from './components/Grupos/TablaGrupos';
 import RecuperarPassword from './pages/RecuperarPassword';
+import Galeria from './pages/Galeria';
 
 function App() {
   const { user } = useAuth();
@@ -32,6 +33,7 @@ function App() {
           <Route path="pronosticos" element={<Pronosticos />} />
           <Route path="resultados" element={<Resultados />} />
           <Route path="grupos" element={<TablaGrupos />} />
+          <Route path="galeria" element={<Galeria />} />
           
           {/* Rutas de administración */}
           <Route path="admin/juegos" element={

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import TerminosCondiciones from '../components/TerminosCondiciones';
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showTerminos, setShowTerminos] = useState(false);
 
   // Construir menuItems según el rol
   const getMenuItems = () => {
@@ -19,10 +21,11 @@ const Layout: React.FC = () => {
       items.push({ path: '/pronosticos', label: 'Pronosticar', icon: '⚽' });
     }
 
-    // Todos ven estos (excepto admin que no ve pronosticar)
+    // Todos ven estos
     items.push(
       { path: '/resultados', label: 'Resultados', icon: '📊' },
-      { path: '/grupos', label: 'Grupos', icon: '📊' }
+      { path: '/grupos', label: 'Grupos', icon: '📊' },
+      { path: '/galeria', label: 'Galería', icon: '📸' }
     );
 
     // Administradores ven opciones adicionales
@@ -48,10 +51,15 @@ const Layout: React.FC = () => {
   return (
     <div className="layout">
       {/* Header */}
-      <header className="header">
+      <header className="header" style={{ 
+          backgroundImage: `url('https://quiniela-images.s3.us-east-1.amazonaws.com/images/navbar5.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}>
         <div className="header-content">
           <div className="logo">
-            <h1>🏆 Quiniela Mundial 2026</h1>
+            <h1>Quiniela Mundial 2026</h1>
           </div>
           
           <button 
@@ -76,10 +84,21 @@ const Layout: React.FC = () => {
               </button>
             ))}
             
+            {/* Botón REGLAS */}
+            <button
+              className="nav-item reglas-btn"
+              onClick={() => {
+                setShowTerminos(true);
+                setMobileMenuOpen(false);
+              }}
+            >
+              <span className="nav-icon">📋</span>
+              REGLAS
+            </button>
+            
             <div className="user-section">
               <span className="user-info">
-                {user?.nombres} ({user?.empresa})
-                {user?.rol === 'Administrador Site' && ' 👑'}
+                {user?.nombres}
               </span>
               <button onClick={handleLogout} className="logout-btn">
                 Cerrar Sesión
@@ -93,6 +112,12 @@ const Layout: React.FC = () => {
       <main className="main-content">
         <Outlet />
       </main>
+
+      {/* Modal de Términos y Condiciones */}
+      <TerminosCondiciones
+        isOpen={showTerminos}
+        onClose={() => setShowTerminos(false)}
+      />
     </div>
   );
 };
