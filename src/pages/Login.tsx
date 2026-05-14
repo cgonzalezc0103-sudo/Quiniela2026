@@ -3,64 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import { LoginRequest } from '../types';
-
-// Imágenes para el carrusel publicitario
-const carouselImages = [
-  {
-    url: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/Carrusel/2.webp',
-    title: '¡Vive la emoción del Mundial 2026!',
-    subtitle: 'Pronostica y gana grandes premios'
-  },
-  {
-    url: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/Carrusel/3.jpg',
-    title: 'Sigue a tu equipo favorito',
-    subtitle: 'Bonificación especial según su desempeño'
-  },
-  {
-    url: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/Carrusel/4.avif',
-    title: 'Códigos promocionales',
-    subtitle: '¡Activa tu cuenta automáticamente!'
-  },
-  {
-    url: 'https://digitalhub.fifa.com/transform/7f6547c8-d6f4-4b56-98e9-a425be706d13/Clutch?&io=transform:fill,aspectratio:16x9,width:1366&quality=75',
-    title: 'Ranking en tiempo real',
-    subtitle: 'Compite con otros aficionados'
-  }
-];
-
-// Logos de sponsors con URLs de imágenes reales
-const sponsors = [
-  { 
-    name: 'SIGO SA', 
-    logoUrl: 'https://sigo.com.ve/images/thumbs/0011685.png',
-    alt: 'SIGO',
-    color: '#e31b23'
-  },
-  { 
-    name: 'Pepsi', 
-    logoUrl: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/2.png',
-    alt: 'Pepsi',
-    color: '#215b9e'
-  },
-  { 
-    name: 'Cola Cola', 
-    logoUrl: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/1.gif',
-    alt: 'Cola Cola',
-    color: '#1a1f71'
-  },
-  { 
-    name: 'Visa', 
-    logoUrl: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/4.png',
-    alt: 'Visa',
-    color: '#cf142b'
-  },
-  { 
-    name: 'Gatorade', 
-    logoUrl: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/3.png',
-    alt: 'Gatorade',
-    color: '#00a651'
-  }
-];
+import { configuracionAPI } from '../services/api';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -69,16 +12,52 @@ const Login: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [carouselImages, setCarouselImages] = useState<{ url: string; title: string; subtitle: string }[]>([]);
+  const [sponsors, setSponsors] = useState<any[]>([]);
+  const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  // Cargar configuración visual
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const [carouselRes, sponsorsRes] = await Promise.all([
+          configuracionAPI.getBySeccion('login_carousel'),
+          configuracionAPI.getBySeccion('sponsors_login')
+        ]);
+        const carouselItems = carouselRes.data.map(item => ({
+          url: item.valorImagen!,
+          title: item.valorTexto || '',
+          subtitle: item.link || ''
+        }));
+        setCarouselImages(carouselItems);
+        const sponsorsItems = sponsorsRes.data.map(item => ({
+          name: item.valorTexto,
+          logoUrl: item.valorImagen,
+          alt: item.clave,
+          color: item.color || '#1976d2',
+          link: item.link
+        }));
+        setSponsors(sponsorsItems);
+      } catch (error) {
+        console.error('Error loading config:', error);
+        toast.error('Error al cargar la configuración visual');
+      } finally {
+        setIsLoadingConfig(false);
+      }
+    };
+    fetchConfig();
+  }, []);
+
   // Auto-play del carrusel
   useEffect(() => {
+    if (carouselImages.length === 0) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % carouselImages.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [carouselImages]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -110,6 +89,14 @@ const Login: React.FC = () => {
     setCurrentImageIndex((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
   };
 
+  if (isLoadingConfig) {
+    return (
+      <div className="auth-container">
+        <div className="loading">Cargando...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="login-container">
       {/* Sección izquierda - Carrusel y sponsors */}
@@ -118,15 +105,19 @@ const Login: React.FC = () => {
         <div className="promo-carousel">
           <button className="carousel-arrow prev" onClick={prevSlide}>❮</button>
           <div className="carousel-slide">
-            <img 
-              src={carouselImages[currentImageIndex].url} 
-              alt="Publicidad Quiniela"
-              className="carousel-image"
-            />
-            <div className="carousel-caption">
-              <h3>{carouselImages[currentImageIndex].title}</h3>
-              <p>{carouselImages[currentImageIndex].subtitle}</p>
-            </div>
+            {carouselImages.length > 0 && (
+              <>
+                <img 
+                  src={carouselImages[currentImageIndex].url} 
+                  alt="Publicidad Quiniela"
+                  className="carousel-image"
+                />
+                <div className="carousel-caption">
+                  <h3>{carouselImages[currentImageIndex].title}</h3>
+                  <p>{carouselImages[currentImageIndex].subtitle}</p>
+                </div>
+              </>
+            )}
           </div>
           <button className="carousel-arrow next" onClick={nextSlide}>❯</button>
           
@@ -146,8 +137,14 @@ const Login: React.FC = () => {
           <h4>Patrocinadores Oficiales</h4>
           <div className="sponsors-grid">
             {sponsors.map((sponsor, index) => (
-              <div key={index} className="sponsor-item">
-                <div className="sponsor-logo-container">
+              <a 
+                key={index}
+                href={sponsor.link || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sponsor-item"
+              >
+                <div className="sponsor-logo-container" style={{ backgroundColor: sponsor.color }}>
                   <img 
                     src={sponsor.logoUrl} 
                     alt={sponsor.alt}
@@ -163,7 +160,7 @@ const Login: React.FC = () => {
                   />
                 </div>
                 <span className="sponsor-name">{sponsor.name}</span>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -173,13 +170,12 @@ const Login: React.FC = () => {
       <div className="login-right">
         <div className="login-card">
           <div className="login-header">
-            {/* Imagen en lugar del balón */}
             <img 
-              src="https://quiniela-images.s3.us-east-1.amazonaws.com/images/logo2.jpg"  // Cambia por la ruta correcta de tu imagen
-              alt="Quiniela Mundial 2026"
+              src="https://quiniela-images.s3.us-east-1.amazonaws.com/images/logo2.jpg"
+              alt="Quiniela Sigo 2026"
               className="login-logo"
             />
-            <h2>Quiniela Mundial 2026</h2>
+            <h2>Quiniela Sigo 2026</h2>
             <p>Inicia sesión para comenzar a pronosticar</p>
           </div>
 
@@ -189,12 +185,12 @@ const Login: React.FC = () => {
               <div className="input-icon">
                 <span className="icon">📧</span>
                 <input
-                  type="email"
+                  type="text"
                   name="Email"
                   value={formData.Email}
                   onChange={handleChange}
                   required
-                  placeholder="tu@email.com"
+                  placeholder="tu@email.com o Usuario"
                 />
               </div>
             </div>
@@ -214,8 +210,8 @@ const Login: React.FC = () => {
               </div>
             </div>
 
-            <div className="form-options">
-              <Link to="/recuperar-password" className="forgot-link">
+            <div className="recovery-link">
+              <Link to="/recuperar-password" className="auth-link">
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>

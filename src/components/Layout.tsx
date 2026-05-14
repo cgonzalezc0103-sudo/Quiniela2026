@@ -59,7 +59,7 @@ const Layout: React.FC = () => {
         }}>
         <div className="header-content">
           <div className="logo">
-            <h1>Quiniela Mundial 2026</h1>
+            <h1>Quiniela Sigo 2026</h1>
           </div>
           
           <button 

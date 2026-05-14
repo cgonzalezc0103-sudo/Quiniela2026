@@ -290,23 +290,38 @@ const ciudades = [
 // DATOS COMPLETOS - EQUIPOS (48 equipos clasificados)
 // 3 anfitriones + 45 clasificados en orden alfabético
 // ============================================
+// ============================================
+// DATOS COMPLETOS - EQUIPOS (48 equipos clasificados)
+// ANFITRIONES primero, luego orden alfabético
+// ============================================
 const equipos = [
-  // ========== ANFITRIONES (3) ==========
+  // ========== ANFITRIONES (3) - PRIMEROS ==========
   {
     id: 1,
+    nombre: 'Canadá',
+    siglas: 'can',
+    confederacion: 'CONCACAF',
+    copasMundiales: 2,
+    mejorResultado: 'Fase de grupos (1986)',
+    descripcion: 'La selección canadiense llega con su generación dorada. Como coanfitrión, buscará hacer historia.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/canada.webp',
+    estrellas: ['Alphonso Davies', 'Jonathan David', 'Stephen Eustáquio', 'Cyle Larin']
+  },
+  {
+    id: 2,
     nombre: 'México',
-    siglas: 'mex', // Debes agregar la sigla (ej: 'MEX')
+    siglas: 'mex',
     confederacion: 'CONCACAF',
     copasMundiales: 17,
     mejorResultado: 'Cuartos de final (1970, 1986)',
-    descripcion: 'El "Tri" es el equipo más representativo de CONCACAF. Como anfitrión junto a USA y Canadá, buscará hacer historia en casa.',
+    descripcion: 'El "Tri" es el equipo más representativo de CONCACAF. Como anfitrión, buscará hacer historia en casa.',
     imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/mexico.webp',
     estrellas: ['Hirving Lozano', 'Santiago Giménez', 'Edson Álvarez', 'Raúl Jiménez']
   },
   {
-    id: 2,
+    id: 3,
     nombre: 'USA',
-    siglas: 'usa', // Debes agregar la sigla (ej: 'USA')
+    siglas: 'usa',
     confederacion: 'CONCACAF',
     copasMundiales: 11,
     mejorResultado: 'Tercer lugar (1930)',
@@ -314,23 +329,12 @@ const equipos = [
     imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/usa.webp',
     estrellas: ['Christian Pulisic', 'Weston McKennie', 'Gio Reyna', 'Tim Weah']
   },
-  {
-    id: 3,
-    nombre: 'Canadá',
-    siglas: 'can', // Debes agregar la sigla (ej: 'CAN')
-    confederacion: 'CONCACAF',
-    copasMundiales: 2,
-    mejorResultado: 'Fase de grupos (1986)',
-    descripcion: 'La selección canadiense llega con su generación dorada. Por primera vez clasifica como coanfitrión.',
-    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/canada.webp',
-    estrellas: ['Alphonso Davies', 'Jonathan David', 'Stephen Eustáquio', 'Cyle Larin']
-  },
   
   // ========== RESTO DE EQUIPOS EN ORDEN ALFABÉTICO ==========
   {
     id: 4,
     nombre: 'Alemania',
-    siglas: 'ale', // Debes agregar la sigla (ej: 'GER')
+    siglas: 'ale',
     confederacion: 'UEFA',
     copasMundiales: 20,
     mejorResultado: 'Campeón (1954, 1974, 1990, 2014)',
@@ -340,19 +344,8 @@ const equipos = [
   },
   {
     id: 5,
-    nombre: 'Argelia',
-    siglas: 'alg', // Debes agregar la sigla (ej: 'ALG')
-    confederacion: 'CAF',
-    copasMundiales: 4,
-    mejorResultado: 'Octavos de final (2014)',
-    descripcion: 'Los "Zorros del Desierto" buscan repetir su buena actuación de Brasil 2014.',
-    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/algelia.jpg',
-    estrellas: ['Riyad Mahrez', 'Ismaël Bennacer', 'Youcef Atal', 'Said Benrahma']
-  },
-  {
-    id: 6,
     nombre: 'Arabia Saudita',
-    siglas: 'ara', // Debes agregar la sigla (ej: 'KSA')
+    siglas: 'ara',
     confederacion: 'AFC',
     copasMundiales: 6,
     mejorResultado: 'Octavos de final (1994)',
@@ -361,9 +354,20 @@ const equipos = [
     estrellas: ['Salem Al-Dawsari', 'Feras Al-Brikan', 'Saud Abdulhamid', 'Yasser Al-Shahrani']
   },
   {
+    id: 6,
+    nombre: 'Argelia',
+    siglas: 'alg',
+    confederacion: 'CAF',
+    copasMundiales: 4,
+    mejorResultado: 'Octavos de final (2014)',
+    descripcion: 'Los "Zorros del Desierto" buscan repetir su buena actuación de Brasil 2014.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/algelia.jpg',
+    estrellas: ['Riyad Mahrez', 'Ismaël Bennacer', 'Youcef Atal', 'Said Benrahma']
+  },
+  {
     id: 7,
     nombre: 'Argentina',
-    siglas: 'arg', // Debes agregar la sigla (ej: 'ARG')
+    siglas: 'arg',
     confederacion: 'CONMEBOL',
     copasMundiales: 18,
     mejorResultado: 'Campeón (1978, 1986, 2022)',
@@ -374,7 +378,7 @@ const equipos = [
   {
     id: 8,
     nombre: 'Australia',
-    siglas: 'ast', // Debes agregar la sigla (ej: 'AUS')
+    siglas: 'ast',
     confederacion: 'AFC',
     copasMundiales: 6,
     mejorResultado: 'Octavos de final (2006, 2022)',
@@ -385,7 +389,7 @@ const equipos = [
   {
     id: 9,
     nombre: 'Austria',
-    siglas: 'aus', // Debes agregar la sigla (ej: 'AUT')
+    siglas: 'aus',
     confederacion: 'UEFA',
     copasMundiales: 7,
     mejorResultado: 'Tercer lugar (1954)',
@@ -396,7 +400,7 @@ const equipos = [
   {
     id: 10,
     nombre: 'Bélgica',
-    siglas: 'bel', // Debes agregar la sigla (ej: 'BEL')
+    siglas: 'bel',
     confederacion: 'UEFA',
     copasMundiales: 14,
     mejorResultado: 'Tercer lugar (2018)',
@@ -406,8 +410,19 @@ const equipos = [
   },
   {
     id: 11,
+    nombre: 'Bosnia y Herzegovina',
+    siglas: 'bos',
+    confederacion: 'UEFA',
+    copasMundiales: 1,
+    mejorResultado: 'Fase de grupos (2014)',
+    descripcion: 'Los "Dragones" buscan repetir su histórica participación en Brasil 2014.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/bosnia.jpg',
+    estrellas: ['Edin Džeko', 'Miralem Pjanić', 'Sead Kolašinac', 'Gojko Cimirot']
+  },
+  {
+    id: 12,
     nombre: 'Brasil',
-    siglas: 'bra', // Debes agregar la sigla (ej: 'BRA')
+    siglas: 'bra',
     confederacion: 'CONMEBOL',
     copasMundiales: 22,
     mejorResultado: 'Campeón (1958, 1962, 1970, 1994, 2002)',
@@ -416,9 +431,9 @@ const equipos = [
     estrellas: ['Vinícius Jr.', 'Neymar', 'Rodrygo', 'Raphinha']
   },
   {
-    id: 12,
+    id: 13,
     nombre: 'Cabo Verde',
-    siglas: 'cab', // Debes agregar la sigla (ej: 'CPV')
+    siglas: 'cab',
     confederacion: 'CAF',
     copasMundiales: 0,
     mejorResultado: 'Primera participación',
@@ -427,9 +442,9 @@ const equipos = [
     estrellas: ['Jovane Cabral', 'Garry Rodrigues', 'Dylan Tavares', 'Ryan Mendes']
   },
   {
-    id: 13,
+    id: 14,
     nombre: 'Colombia',
-    siglas: 'col', // Debes agregar la sigla (ej: 'COL')
+    siglas: 'col',
     confederacion: 'CONMEBOL',
     copasMundiales: 6,
     mejorResultado: 'Cuartos de final (2014)',
@@ -438,9 +453,9 @@ const equipos = [
     estrellas: ['Luis Díaz', 'James Rodríguez', 'Jhon Durán', 'Richard Ríos']
   },
   {
-    id: 14,
+    id: 15,
     nombre: 'Corea del Sur',
-    siglas: 'cor', // Debes agregar la sigla (ej: 'KOR')
+    siglas: 'cor',
     confederacion: 'AFC',
     copasMundiales: 11,
     mejorResultado: 'Semifinales (2002)',
@@ -449,9 +464,9 @@ const equipos = [
     estrellas: ['Son Heung-min', 'Kim Min-jae', 'Lee Kang-in', 'Hwang Hee-chan']
   },
   {
-    id: 15,
+    id: 16,
     nombre: 'Costa de Marfil',
-    siglas: 'cos', // Debes agregar la sigla (ej: 'CIV')
+    siglas: 'cos',
     confederacion: 'CAF',
     copasMundiales: 3,
     mejorResultado: 'Fase de grupos (2006, 2010, 2014)',
@@ -460,9 +475,9 @@ const equipos = [
     estrellas: ['Sébastien Haller', 'Franck Kessié', 'Nicolas Pépé', 'Ibrahim Sangaré']
   },
   {
-    id: 16,
+    id: 17,
     nombre: 'Croacia',
-    siglas: 'cro', // Debes agregar la sigla (ej: 'CRO')
+    siglas: 'cro',
     confederacion: 'UEFA',
     copasMundiales: 6,
     mejorResultado: 'Subcampeón (2018)',
@@ -471,9 +486,9 @@ const equipos = [
     estrellas: ['Luka Modrić', 'Josko Gvardiol', 'Ivan Perišić', 'Mateo Kovačić']
   },
   {
-    id: 17,
+    id: 18,
     nombre: 'Curasao',
-    siglas: 'cur', // Debes agregar la sigla (ej: 'CUW')
+    siglas: 'cur',
     confederacion: 'CONCACAF',
     copasMundiales: 0,
     mejorResultado: 'Primera participación',
@@ -482,9 +497,9 @@ const equipos = [
     estrellas: ['Juninho Bacuna', 'Leandro Bacuna', 'Cuco Martina', 'Kenji Gorré']
   },
   {
-    id: 18,
+    id: 19,
     nombre: 'Ecuador',
-    siglas: 'ecu', // Debes agregar la sigla (ej: 'ECU')
+    siglas: 'ecu',
     confederacion: 'CONMEBOL',
     copasMundiales: 4,
     mejorResultado: 'Octavos de final (2006)',
@@ -493,9 +508,9 @@ const equipos = [
     estrellas: ['Moisés Caicedo', 'Pervis Estupiñán', 'Enner Valencia', 'Kendry Páez']
   },
   {
-    id: 19,
+    id: 20,
     nombre: 'Egipto',
-    siglas: 'egi', // Debes agregar la sigla (ej: 'EGY')
+    siglas: 'egi',
     confederacion: 'CAF',
     copasMundiales: 3,
     mejorResultado: 'Fase de grupos (1934, 1990, 2018)',
@@ -504,9 +519,9 @@ const equipos = [
     estrellas: ['Mohamed Salah', 'Mohamed Elneny', 'Mostafa Mohamed', 'Omar Marmoush']
   },
   {
-    id: 20,
+    id: 21,
     nombre: 'Escocia',
-    siglas: 'esc', // Debes agregar la sigla (ej: 'SCO')
+    siglas: 'esc',
     confederacion: 'UEFA',
     copasMundiales: 8,
     mejorResultado: 'Fase de grupos (1954, 1958, 1974, 1978, 1982, 1986, 1990, 1998)',
@@ -515,9 +530,9 @@ const equipos = [
     estrellas: ['Scott McTominay', 'Andy Robertson', 'John McGinn', 'Billy Gilmour']
   },
   {
-    id: 21,
+    id: 22,
     nombre: 'España',
-    siglas: 'esp', // Debes agregar la sigla (ej: 'ESP')
+    siglas: 'esp',
     confederacion: 'UEFA',
     copasMundiales: 16,
     mejorResultado: 'Campeón (2010)',
@@ -526,9 +541,9 @@ const equipos = [
     estrellas: ['Pedri', 'Gavi', 'Rodri', 'Álvaro Morata']
   },
   {
-    id: 22,
+    id: 23,
     nombre: 'Francia',
-    siglas: 'fra', // Debes agregar la sigla (ej: 'FRA')
+    siglas: 'fra',
     confederacion: 'UEFA',
     copasMundiales: 16,
     mejorResultado: 'Campeón (1998, 2018)',
@@ -537,9 +552,9 @@ const equipos = [
     estrellas: ['Kylian Mbappé', 'Antoine Griezmann', 'Aurélien Tchouaméni', 'Eduardo Camavinga']
   },
   {
-    id: 23,
+    id: 24,
     nombre: 'Ghana',
-    siglas: 'gha', // Debes agregar la sigla (ej: 'GHA')
+    siglas: 'gha',
     confederacion: 'CAF',
     copasMundiales: 4,
     mejorResultado: 'Cuartos de final (2010)',
@@ -548,9 +563,9 @@ const equipos = [
     estrellas: ['Mohammed Kudus', 'Thomas Partey', 'Jordan Ayew', 'Iñaki Williams']
   },
   {
-    id: 24,
+    id: 25,
     nombre: 'Haiti',
-    siglas: 'hai', // Debes agregar la sigla (ej: 'HAI')
+    siglas: 'hai',
     confederacion: 'CONCACAF',
     copasMundiales: 1,
     mejorResultado: 'Fase de grupos (1974)',
@@ -559,9 +574,9 @@ const equipos = [
     estrellas: ['Duckens Nazon', 'Frantzdy Pierrot', 'Derrick Etienne', 'Ricardo Adé']
   },
   {
-    id: 25,
+    id: 26,
     nombre: 'Holanda',
-    siglas: 'hol', // Debes agregar la sigla (ej: 'NED')
+    siglas: 'hol',
     confederacion: 'UEFA',
     copasMundiales: 11,
     mejorResultado: 'Subcampeón (1974, 1978, 2010)',
@@ -570,9 +585,9 @@ const equipos = [
     estrellas: ['Virgil van Dijk', 'Frenkie de Jong', 'Cody Gakpo', 'Xavi Simons']
   },
   {
-    id: 26,
+    id: 27,
     nombre: 'Inglaterra',
-    siglas: 'ing', // Debes agregar la sigla (ej: 'ENG')
+    siglas: 'ing',
     confederacion: 'UEFA',
     copasMundiales: 16,
     mejorResultado: 'Campeón (1966)',
@@ -581,9 +596,20 @@ const equipos = [
     estrellas: ['Jude Bellingham', 'Harry Kane', 'Bukayo Saka', 'Phil Foden']
   },
   {
-    id: 27,
-    nombre: 'Iran',
-    siglas: 'ira', // Debes agregar la sigla (ej: 'IRN')
+    id: 28,
+    nombre: 'Irak',
+    siglas: 'irk',
+    confederacion: 'AFC',
+    copasMundiales: 1,
+    mejorResultado: 'Fase de grupos (1986)',
+    descripcion: 'Los "Leones de Mesopotamia" buscan regresar a la máxima cita tras casi 40 años.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/irak.webp',
+    estrellas: ['Ali Adnan', 'Mohannad Ali', 'Amir Al-Ammari', 'Mustafa Nadhim']
+  },
+  {
+    id: 29,
+    nombre: 'Irán',
+    siglas: 'ira',
     confederacion: 'AFC',
     copasMundiales: 6,
     mejorResultado: 'Fase de grupos (1978, 1998, 2006, 2014, 2018, 2022)',
@@ -592,9 +618,9 @@ const equipos = [
     estrellas: ['Sardar Azmoun', 'Mehdi Taremi', 'Ali Reza Jahanbakhsh', 'Saman Ghoddos']
   },
   {
-    id: 28,
+    id: 30,
     nombre: 'Japón',
-    siglas: 'jap', // Debes agregar la sigla (ej: 'JPN')
+    siglas: 'jap',
     confederacion: 'AFC',
     copasMundiales: 7,
     mejorResultado: 'Octavos de final (2002, 2010, 2018, 2022)',
@@ -603,9 +629,9 @@ const equipos = [
     estrellas: ['Takefusa Kubo', 'Daichi Kamada', 'Wataru Endo', 'Kaoru Mitoma']
   },
   {
-    id: 29,
+    id: 31,
     nombre: 'Jordania',
-    siglas: 'jor', // Debes agregar la sigla (ej: 'JOR')
+    siglas: 'jor',
     confederacion: 'AFC',
     copasMundiales: 0,
     mejorResultado: 'Primera participación',
@@ -614,9 +640,9 @@ const equipos = [
     estrellas: ['Musa Al-Taamari', 'Yazan Al-Naimat', 'Nizar Al-Rashdan', 'Yazeed Abulaila']
   },
   {
-    id: 30,
+    id: 32,
     nombre: 'Marruecos',
-    siglas: 'mar', // Debes agregar la sigla (ej: 'MAR')
+    siglas: 'mar',
     confederacion: 'CAF',
     copasMundiales: 6,
     mejorResultado: 'Semifinales (2022)',
@@ -625,9 +651,9 @@ const equipos = [
     estrellas: ['Achraf Hakimi', 'Hakim Ziyech', 'Yassine Bounou', 'Nayef Aguerd']
   },
   {
-    id: 31,
+    id: 33,
     nombre: 'Noruega',
-    siglas: 'nor', // Debes agregar la sigla (ej: 'NOR')
+    siglas: 'nor',
     confederacion: 'UEFA',
     copasMundiales: 3,
     mejorResultado: 'Octavos de final (1938, 1998)',
@@ -636,9 +662,9 @@ const equipos = [
     estrellas: ['Erling Haaland', 'Martin Ødegaard', 'Alexander Sørloth', 'Kristoffer Ajer']
   },
   {
-    id: 32,
+    id: 34,
     nombre: 'Nueva Zelanda',
-    siglas: 'nue', // Debes agregar la sigla (ej: 'NZL')
+    siglas: 'nue',
     confederacion: 'OFC',
     copasMundiales: 2,
     mejorResultado: 'Fase de grupos (1982, 2010)',
@@ -647,9 +673,9 @@ const equipos = [
     estrellas: ['Chris Wood', 'Winston Reid', 'Ryan Thomas', 'Joe Bell']
   },
   {
-    id: 33,
+    id: 35,
     nombre: 'Panamá',
-    siglas: 'pan', // Debes agregar la sigla (ej: 'PAN')
+    siglas: 'pan',
     confederacion: 'CONCACAF',
     copasMundiales: 1,
     mejorResultado: 'Fase de grupos (2018)',
@@ -658,9 +684,9 @@ const equipos = [
     estrellas: ['Aníbal Godoy', 'Yoel Bárcenas', 'Michael Murillo', 'Cristian Martínez']
   },
   {
-    id: 34,
+    id: 36,
     nombre: 'Paraguay',
-    siglas: 'par', // Debes agregar la sigla (ej: 'PAR')
+    siglas: 'par',
     confederacion: 'CONMEBOL',
     copasMundiales: 8,
     mejorResultado: 'Cuartos de final (2010)',
@@ -669,9 +695,9 @@ const equipos = [
     estrellas: ['Miguel Almirón', 'Julio Enciso', 'Antonio Sanabria', 'Mathías Villasanti']
   },
   {
-    id: 35,
+    id: 37,
     nombre: 'Portugal',
-    siglas: 'por', // Debes agregar la sigla (ej: 'POR')
+    siglas: 'por',
     confederacion: 'UEFA',
     copasMundiales: 8,
     mejorResultado: 'Tercer lugar (1966)',
@@ -680,9 +706,9 @@ const equipos = [
     estrellas: ['Cristiano Ronaldo', 'Bernardo Silva', 'João Cancelo', 'Rúben Dias']
   },
   {
-    id: 36,
+    id: 38,
     nombre: 'Qatar',
-    siglas: 'qat', // Debes agregar la sigla (ej: 'QAT')
+    siglas: 'qat',
     confederacion: 'AFC',
     copasMundiales: 1,
     mejorResultado: 'Fase de grupos (2022)',
@@ -691,9 +717,31 @@ const equipos = [
     estrellas: ['Akram Afif', 'Almoez Ali', 'Hassan Al-Haydos', 'Abdelkarim Hassan']
   },
   {
-    id: 37,
+    id: 39,
+    nombre: 'RD Congo',
+    siglas: 'con',
+    confederacion: 'CAF',
+    copasMundiales: 1,
+    mejorResultado: 'Fase de grupos (1974 como Zaire)',
+    descripcion: 'Los "Leopardos" regresan a un Mundial tras 50 años. Buscan dejar huella en su regreso.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/congo.jfif',
+    estrellas: ['Chancel Mbemba', 'Yoane Wissa', 'Cédric Bakambu', 'Arthur Masuaku']
+  },
+  {
+    id: 40,
+    nombre: 'República Checa',
+    siglas: 'rch',
+    confederacion: 'UEFA',
+    copasMundiales: 6,
+    mejorResultado: 'Subcampeón (1934, 1962 como Checoslovaquia)',
+    descripcion: 'Los checos buscan repetir las grandes actuaciones de Checoslovaquia en el pasado.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/republica-checa.webp',
+    estrellas: ['Patrik Schick', 'Tomáš Souček', 'Vladimír Coufal', 'Adam Hložek']
+  },
+  {
+    id: 41,
     nombre: 'Senegal',
-    siglas: 'sen', // Debes agregar la sigla (ej: 'SEN')
+    siglas: 'sen',
     confederacion: 'CAF',
     copasMundiales: 3,
     mejorResultado: 'Cuartos de final (2002)',
@@ -702,9 +750,9 @@ const equipos = [
     estrellas: ['Sadio Mané', 'Kalidou Koulibaly', 'Édouard Mendy', 'Pape Matar Sarr']
   },
   {
-    id: 38,
+    id: 42,
     nombre: 'Sudáfrica',
-    siglas: 'sud', // Debes agregar la sigla (ej: 'RSA')
+    siglas: 'sud',
     confederacion: 'CAF',
     copasMundiales: 3,
     mejorResultado: 'Fase de grupos (1998, 2002, 2010)',
@@ -713,9 +761,20 @@ const equipos = [
     estrellas: ['Percy Tau', 'Themba Zwane', 'Ronwen Williams', 'Lyle Foster']
   },
   {
-    id: 39,
+    id: 43,
+    nombre: 'Suecia',
+    siglas: 'sue',
+    confederacion: 'UEFA',
+    copasMundiales: 12,
+    mejorResultado: 'Subcampeón (1958)',
+    descripcion: 'Los suecos buscan repetir su histórica actuación como anfitriones en 1958.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/suecia.webp',
+    estrellas: ['Alexander Isak', 'Dejan Kulusevski', 'Emil Forsberg', 'Victor Lindelöf']
+  },
+  {
+    id: 44,
     nombre: 'Suiza',
-    siglas: 'sui', // Debes agregar la sigla (ej: 'SUI')
+    siglas: 'sui',
     confederacion: 'UEFA',
     copasMundiales: 12,
     mejorResultado: 'Cuartos de final (1934, 1938, 1954)',
@@ -724,9 +783,9 @@ const equipos = [
     estrellas: ['Granit Xhaka', 'Manuel Akanji', 'Xherdan Shaqiri', 'Remo Freuler']
   },
   {
-    id: 40,
+    id: 45,
     nombre: 'Túnez',
-    siglas: 'tun', // Debes agregar la sigla (ej: 'TUN')
+    siglas: 'tun',
     confederacion: 'CAF',
     copasMundiales: 6,
     mejorResultado: 'Fase de grupos (1978, 1998, 2002, 2006, 2018, 2022)',
@@ -735,26 +794,37 @@ const equipos = [
     estrellas: ['Youssef Msakni', 'Wahbi Khazri', 'Ellyes Skhiri', 'Aissa Laïdouni']
   },
   {
-    id: 41,
-    nombre: 'Uzbekistán',
-    siglas: 'ube', // Debes agregar la sigla (ej: 'UZB')
-    confederacion: 'AFC',
-    copasMundiales: 0,
-    mejorResultado: 'Primera participación',
-    descripcion: 'Los "Wolfpack" harán su debut mundialista tras una destacada campaña en las eliminatorias asiáticas.',
-    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/uzbekistan.webp',
-    estrellas: ['Eldor Shomurodov', 'Jaloliddin Masharipov', 'Otabek Shukurov', 'Rustam Ashurmatov']
+    id: 46,
+    nombre: 'Turquía',
+    siglas: 'tur',
+    confederacion: 'UEFA',
+    copasMundiales: 2,
+    mejorResultado: 'Tercer lugar (2002)',
+    descripcion: 'Los turcos buscan repetir la hazaña de Corea-Japón 2002, donde fueron terceros.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/turquia.jpg',
+    estrellas: ['Hakan Çalhanoğlu', 'Arda Güler', 'Kenan Yıldız', 'Ferdi Kadıoğlu']
   },
   {
-    id: 42,
+    id: 47,
     nombre: 'Uruguay',
-    siglas: 'uru', // Debes agregar la sigla (ej: 'URU')
+    siglas: 'uru',
     confederacion: 'CONMEBOL',
     copasMundiales: 14,
     mejorResultado: 'Campeón (1930, 1950)',
     descripcion: 'La "Celeste" tiene una rica historia mundialista. Buscará volver a ser protagonista.',
     imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/uruguay.jpeg',
     estrellas: ['Federico Valverde', 'Darwin Núñez', 'Ronald Araújo', 'Manuel Ugarte']
+  },
+  {
+    id: 48,
+    nombre: 'Uzbekistán',
+    siglas: 'ube',
+    confederacion: 'AFC',
+    copasMundiales: 0,
+    mejorResultado: 'Primera participación',
+    descripcion: 'Los "Wolfpack" harán su debut mundialista tras una destacada campaña en las eliminatorias asiáticas.',
+    imagen: 'https://quiniela-images.s3.us-east-1.amazonaws.com/images/equipos/uzbekistan.webp',
+    estrellas: ['Eldor Shomurodov', 'Jaloliddin Masharipov', 'Otabek Shukurov', 'Rustam Ashurmatov']
   }
 ];
 

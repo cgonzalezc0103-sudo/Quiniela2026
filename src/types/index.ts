@@ -36,7 +36,7 @@ export interface RegisterRequest {
   Password: string;
   Cedula: string;
   CodigoPromocional: string;
-  IdEquipo?: number;
+  IdEquipo: number; // Ahora es obligatorio (no opcional)
   aceptaTerminos?: boolean;
 }
 
@@ -76,10 +76,12 @@ export interface Resultado {
 
 export interface Ranking {
   posicion: number;
+  idUsuario : number;
   nombres: string;
   empresa: string;
   puntosTotales: number;
   alias: string;
+  ultimaActualizacion?: string;
 }
 
 export interface ApiResponse<T> {
@@ -205,4 +207,89 @@ export interface JuegoResultado {
   resultado1: number;
   resultado2: number;
   indFinalizado: boolean;
+}
+
+export interface Pago {
+  idPago: number;
+  nombre: string;
+  cedula: string;
+  telefono: string;
+  referencia: string;
+  monto: number;
+  imagenUrl: string;
+  fechaRegistro: string;
+  estado: 'Pendiente' | 'Aprobado' | 'Rechazado';
+  observacion?: string;
+}
+
+export interface RegistrarPagoRequest {
+  nombre: string;
+  cedula: string;
+  telefono: string;
+  referencia: string;
+  monto: number;
+  imagenBase64: string;
+}
+
+export interface PuntoJuego {
+  idUsuario: number;
+  userName: string;
+  nombres: string;
+  puntosObtenidos: number;
+  tipoAcierto: string;
+  pronostico1: number;
+  pronostico2: number;
+  resultado1: number;
+  resultado2: number;
+}
+
+export interface RollPromocional {
+  idRoll: number;
+  nombreRoll: string;
+  empresa: string;
+  cantidadTotal: number;
+  utilizados: number;
+  fechaCreacion: string;
+  indActivo: boolean;
+}
+
+export interface CodigoDetalle {
+  idDetalle: number;
+  codigo: string;
+  estado: number; // 0 disponible, 1 usado
+  cedulaUsuario?: string;
+  nombreUsuario?: string;
+  fechaUso?: string;
+}
+
+export interface CrearRollRequest {
+  idEmpresa: number;
+  cantidad: number;
+}
+
+export interface ConfiguracionVisual {
+  id: number;
+  seccion: string;
+  tipo: string;
+  clave: string;
+  valorTexto?: string;
+  valorImagen?: string;
+  link?: string;
+  color?: string;
+  orden: number;
+  activo: boolean;
+  fechaActualizacion: string;
+}
+
+export interface HistorialPunto {
+  tipo: string;
+  descripcion: string;
+  ronda?: string;
+  pronostico1?: number;
+  pronostico2?: number;
+  resultado1?: number;
+  resultado2?: number;
+  puntosObtenidos: number;
+  tipoAcierto: string;
+  fecha: string;
 }

@@ -30,47 +30,40 @@ const CrearCodigoModal: React.FC<CrearCodigoModalProps> = ({ isOpen, onClose, on
       setLoadingEmpresas(true);
       const response = await codigosAPI.getEmpresas();
       setEmpresas(response.data);
-    } catch (error: any) {
+    } catch (error) {
       toast.error('Error al cargar empresas');
-      console.error('Error loading empresas:', error);
     } finally {
       setLoadingEmpresas(false);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validaciones
     if (!formData.idEmpresa) {
-      toast.error('Debe seleccionar una empresa');
+      toast.error('Seleccione una empresa');
       return;
     }
-
     const cantidad = parseInt(formData.cantidad);
-    if (isNaN(cantidad) || cantidad <= 0) {
-      toast.error('La cantidad debe ser un número mayor a 0');
+    if (isNaN(cantidad) || cantidad <= 0 || cantidad >8000) {
+      toast.error('Cantidad inválida debe seleccionar un numero del 1 al 8000');
       return;
     }
 
     setLoading(true);
     try {
-      await codigosAPI.crearCodigo({
+      await codigosAPI.crearRoll({
         idEmpresa: parseInt(formData.idEmpresa),
         cantidad: cantidad
       });
-      
-      toast.success('Código promocional creado exitosamente');
+      toast.success(`Roll creado con ${cantidad} códigos individuales`);
       onSuccess();
       onClose();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error al crear código');
-      console.error('Error creating codigo:', error);
+      toast.error(error.response?.data?.message || 'Error al crear roll');
     } finally {
       setLoading(false);
     }
@@ -82,65 +75,37 @@ const CrearCodigoModal: React.FC<CrearCodigoModalProps> = ({ isOpen, onClose, on
     <div className="modal-overlay">
       <div className="modal-container">
         <div className="modal-header">
-          <h2>🎫 Crear Código Promocional</h2>
+          <h2>🎫 Crear Roll de Códigos</h2>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
-        
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
             <div className="form-group">
               <label>Empresa:</label>
               {loadingEmpresas ? (
-                <div className="loading-text">Cargando empresas...</div>
+                <div className="loading-text">Cargando...</div>
               ) : (
-                <select
-                  name="idEmpresa"
-                  value={formData.idEmpresa}
-                  onChange={handleChange}
-                  className="form-select"
-                  required
-                >
-                  <option value="">-- Seleccione una empresa --</option>
-                  {empresas.map(empresa => (
-                    <option key={empresa.idEmpresa} value={empresa.idEmpresa}>
-                      {empresa.empresa}
-                    </option>
+                <select name="idEmpresa" value={formData.idEmpresa} onChange={handleChange} required>
+                  <option value="">-- Seleccione --</option>
+                  {empresas.map(emp => (
+                    <option key={emp.idEmpresa} value={emp.idEmpresa}>{emp.empresa}</option>
                   ))}
                 </select>
               )}
             </div>
-            
             <div className="form-group">
-              <label>Cantidad de cupos:</label>
-              <input
-                type="number"
-                name="cantidad"
-                value={formData.cantidad}
-                onChange={handleChange}
-                className="form-input"
-                min="1"
-                step="1"
-                required
-                placeholder="Ej: 10"
-              />
-              <small className="form-text">Número total de cupos disponibles para este código</small>
+              <label>Cantidad de códigos:</label>
+              <input type="number" name="cantidad" value={formData.cantidad} onChange={handleChange} min="1" required />
+              <small>Se generarán esta cantidad de códigos únicos de 6 caracteres.</small>
             </div>
-            
             <div className="info-box">
-              <p>
-                <strong>🔑 El código se generará automáticamente</strong>
-                <br />
-                Será alfanumérico de 6 caracteres y único en el sistema.
-              </p>
+              <p>🔑 Los códigos serán de un solo uso. El roll se identificará automáticamente como "Roll X". La cantidad maxima por Roll es de 8000 codigos</p>
             </div>
           </div>
-          
           <div className="modal-footer">
-            <button type="button" onClick={onClose} className="btn-cancel">
-              Cancelar
-            </button>
+            <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>
             <button type="submit" disabled={loading || loadingEmpresas} className="btn-submit">
-              {loading ? 'Creando...' : 'Crear Código'}
+              {loading ? 'Creando...' : 'Crear Roll'}
             </button>
           </div>
         </form>

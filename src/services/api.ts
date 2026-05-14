@@ -1,7 +1,10 @@
 import axios from 'axios';
-import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple, Empresa, CrearEmpresaRequest, ActualizarEmpresaRequest, JuegoAdmin, JuegoResultado  } from '../types';
+import { LoginRequest, RegisterRequest, PronosticoRequest, User, Juego, Resultado, Ranking, UsuarioAdmin, Grupo, EstadisticaGrupo,Equipo, RegisterResponse, CodigoPromocional, UsuarioCodigo, CrearCodigoRequest, EmpresaSimple, Empresa, CrearEmpresaRequest, ActualizarEmpresaRequest, JuegoAdmin, JuegoResultado, RegistrarPagoRequest, Pago, PuntoJuego, RollPromocional, CodigoDetalle, CrearRollRequest, ConfiguracionVisual, HistorialPunto  } from '../types';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+
+const API_BASE_URL = 'https://quiniela.sigo.com.ve:8443/api';
+
+//const API_BASE_URL = 'http://localhost:5000/api';
 
 //const API_BASE_URL = 'http://quinielaqa.norkut.com.ve:5001/api';
 
@@ -48,10 +51,15 @@ export const resultadosAPI = {
     api.get<Resultado[]>('/resultados', { params: filters }),
   update: (idJuego: number, resultado: PronosticoRequest) => 
     api.put<{ message: string }>(`/resultados/${idJuego}`, resultado),
+  getPuntosPorJuego: (idJuego: number) => 
+    api.get<PuntoJuego[]>(`/resultados/${idJuego}/puntos`),
+  editarResultado: (idJuego: number, resultado1: number, resultado2: number) => 
+    api.put<{ message: string; juego: any }>(`/resultados/${idJuego}`, { resultado1, resultado2 }),
 };
 
 export const rankingAPI = {
   get: () => api.get<Ranking[]>('/ranking'),
+  getHistorial: (idUsuario: number) => api.get<HistorialPunto[]>(`/ranking/historial/${idUsuario}`)
 };
 
 
@@ -69,9 +77,9 @@ export const equiposAPI = {
 };
 
 export const codigosAPI = {
-  getCodigos: () => api.get<CodigoPromocional[]>('/codigospromocionales'),
-  getUsuariosPorCodigo: (id: number) => api.get<UsuarioCodigo[]>(`/codigospromocionales/${id}/usuarios`),
-  crearCodigo: (data: CrearCodigoRequest) => api.post<CodigoPromocional>('/codigospromocionales', data),
+  getRolls: () => api.get<RollPromocional[]>('/codigospromocionales/rolls'),
+  getCodigosPorRoll: (idRoll: number) => api.get<CodigoDetalle[]>(`/codigospromocionales/rolls/${idRoll}/codigos`),
+  crearRoll: (data: CrearRollRequest) => api.post<RollPromocional>('/codigospromocionales/rolls', data),
   getEmpresas: () => api.get<EmpresaSimple[]>('/codigospromocionales/empresas'),
 };
 
@@ -106,6 +114,30 @@ export const juegosAPI = {
   getAdmin: () => api.get<JuegoAdmin[]>('/juegos/admin'),
   actualizarResultado: (idJuego: number, resultado1: number, resultado2: number) => 
     api.put<{ message: string; juego: JuegoResultado }>(`/juegos/resultado/${idJuego}`, { resultado1, resultado2 }),
+};
+
+export const pagosAPI = {
+  registrar: (data: RegistrarPagoRequest) => api.post<{ message: string; idPago: number }>('/pagos/registrar', data),
+  getPendientes: () => api.get<Pago[]>('/pagos/pendientes'),
+  getAll: () => api.get<Pago[]>('/pagos'),
+  actualizarEstado: (id: number, estado: string, observacion?: string) => 
+    api.put<{ message: string; pago: Pago }>(`/pagos/${id}/estado`, { estado, observacion }),
+};
+
+
+export const configuracionAPI = {
+  getBySeccion: (seccion: string) => api.get<ConfiguracionVisual[]>(`/configuracion/seccion/${seccion}`),
+  uploadImagen: (file: File, seccion: string) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    // Enviamos la sección como query param, no en el FormData
+    return api.post<{ url: string }>(`/configuracion/upload?seccion=${encodeURIComponent(seccion)}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
+  guardar: (data: ConfiguracionVisual) => api.post<ConfiguracionVisual>('/configuracion', data),
+  eliminar: (id: number) => api.delete(`/configuracion/${id}`),
+  actualizarOrden: (items: { id: number; orden: number }[]) => api.post('/configuracion/orden', items)
 };
 
 export default api;

@@ -100,7 +100,7 @@ const RecuperarPassword: React.FC = () => {
       <div className="auth-card">
         <div className="auth-header">
           <h2>🔐 Recuperar Contraseña</h2>
-          <p>Quiniela Mundial 2026</p>
+          <p>Quiniela Sigo 2026</p>
         </div>
 
         {/* Tabs de opciones */}

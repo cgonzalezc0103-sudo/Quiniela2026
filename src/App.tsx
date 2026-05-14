@@ -13,6 +13,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import TablaGrupos from './components/Grupos/TablaGrupos';
 import RecuperarPassword from './pages/RecuperarPassword';
 import Galeria from './pages/Galeria';
+import RegistrarPago from './pages/RegistrarPago';
+
 
 function App() {
   const { user } = useAuth();
@@ -21,8 +23,9 @@ function App() {
     <div className="app">
       <Routes>
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-        <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+        <Route path="/register/:codigo?" element={!user ? <Register /> : <Navigate to="/" />} />
         <Route path="/recuperar-password" element={<RecuperarPassword />} />
+        <Route path="/registrar-pago" element={<RegistrarPago />} />
         
         <Route path="/" element={
           <ProtectedRoute>

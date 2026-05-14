@@ -25,9 +25,9 @@ const TerminosCondiciones: React.FC<TerminosCondicionesProps> = ({
         
         <div className="modal-body terminos-content">
           <div className="terminos-header">
-            <h3>QUINIELA MUNDIAL 2026</h3>
+            <h3>QUINIELA SIGO 2026</h3>
             <p className="bienvenida">
-              Bienvenido a QUINIELA MUNDIAL 2026. Al registrarse y participar en nuestra quiniela, 
+              Bienvenido a QUINIELA SIGO 2026. Al registrarse y participar en nuestra quiniela, 
               usted (en adelante, "el Usuario") acepta los siguientes términos y condiciones que rigen 
               el funcionamiento del sistema, la puntuación y la premiación.
             </p>
